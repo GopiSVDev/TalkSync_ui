@@ -133,7 +133,7 @@
 .dark .chat-bg {
   background-color: #000;
   background-image: none;
-} 
+}
 
 .dark .chat-bg::before {
   background-image: url("/bg-pattern-dark.png");
