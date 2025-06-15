@@ -2,35 +2,86 @@ import ChatList from "@/components/Chat/ChatList";
 import ChatWindow from "@/components/Chat/ChatWindow";
 import type { Chat } from "@/types/Chat";
 import { useState } from "react";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 
 const mockChats: Chat[] = [
-  { id: "1", name: "Alice" },
-  { id: "2", name: "Bob" },
-  { id: "3", name: "Charlie" },
+  {
+    id: "1",
+    name: "Alice",
+    lastMessage: "Hey, how are you?",
+    avatarUrl: "",
+    time: "10:24 AM",
+  },
+  {
+    id: "2",
+    name: "Bob",
+    lastMessage: "Got the file, thanks!",
+    avatarUrl: "",
+    time: "9:15 AM",
+  },
+  {
+    id: "3",
+    name: "Charlie",
+    lastMessage: "Let's catch up tomorrow.",
+    avatarUrl: "",
+    time: "Yesterday",
+  },
 ];
 
 export default function App() {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
   return (
-    <div className="h-screen flex flex-col md:flex-row">
-      {/* Chat List (Hidden on mobile if a chat is open) */}
-      <div
-        className={`w-full md:w-1/3 lg:w-1/4 border-r ${
-          selectedChat ? "hidden md:block" : "block"
-        }`}
-      >
-        <ChatList chats={mockChats} onSelect={setSelectedChat} />
-      </div>
+    <>
+      <div className="h-screen w-full hidden md:flex flex-row overflow-hidden chat-bg">
+        <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel
+            defaultSize={30}
+            minSize={20}
+            maxSize={33}
+            className="border-r bg-white dark:bg-[#212121] z-10"
+          >
+            <ChatList
+              chats={mockChats}
+              onSelect={setSelectedChat}
+              selectedChat={selectedChat}
+            />
+          </ResizablePanel>
 
-      {/* Chat Window (Hidden on mobile if no chat is selected) */}
-      <div
-        className={`chat-bg flex-1 ${
-          !selectedChat ? "hidden md:flex" : "flex"
-        } flex-col `}
-      >
-        <ChatWindow chat={selectedChat} onBack={() => setSelectedChat(null)} />
+          <ResizableHandle className="bg-border" />
+
+          <ResizablePanel>
+            <div
+              className={` flex-1 ${
+                !selectedChat ? "hidden md:flex" : "flex"
+              } flex-col`}
+            >
+              <ChatWindow
+                chat={selectedChat}
+                onBack={() => setSelectedChat(null)}
+              />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
-    </div>
+      <div className="h-screen w-full flex flex-col md:hidden bg-white dark:bg-[#212121]">
+        {!selectedChat ? (
+          <ChatList
+            chats={mockChats}
+            onSelect={setSelectedChat}
+            selectedChat={selectedChat}
+          />
+        ) : (
+          <ChatWindow
+            chat={selectedChat}
+            onBack={() => setSelectedChat(null)}
+          />
+        )}
+      </div>
+    </>
   );
 }
