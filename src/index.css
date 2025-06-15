@@ -118,3 +118,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+.chat-bg {
+  @apply relative flex-1 flex-col bg-cover bg-no-repeat bg-center;
+  background-image: url("/bg.png");
+}
+
+.chat-bg::before {
+  content: "";
+  @apply absolute inset-0 bg-repeat opacity-40 pointer-events-none;
+  background-image: url("/bg-pattern-light.png");
+}
+
+.dark .chat-bg {
+  background-color: #000;
+  background-image: none;
+} 
+
+.dark .chat-bg::before {
+  background-image: url("/bg-pattern-dark.png");
+  opacity: 0.1;
+}
