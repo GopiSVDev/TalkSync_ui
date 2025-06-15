@@ -139,14 +139,16 @@ body {
   content: "";
   @apply absolute inset-0 bg-repeat opacity-40 pointer-events-none;
   background-image: url("/bg-pattern-light.png");
+  z-index: 0;
 }
 
 .dark .chat-bg {
-  background-color: #000;
+  background-color: rgb(15, 15, 15);
   background-image: none;
 }
 
 .dark .chat-bg::before {
+  content: "";
+  @apply absolute inset-0 bg-repeat opacity-100 pointer-events-none;
   background-image: url("/bg-pattern-dark.png");
-  opacity: 0.1;
 }

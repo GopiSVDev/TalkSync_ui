@@ -7,7 +7,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/use-theme";
 import { AlignJustify } from "lucide-react";
@@ -25,16 +24,19 @@ export function DropDownMenu() {
           <AlignJustify />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="start">
+      <DropdownMenuContent
+        className="w-56 bg-white dark:bg-[#212121] "
+        align="start"
+      >
         <DropdownMenuGroup>
           <DropdownMenuItem>Profile</DropdownMenuItem>
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
             <div
-              className="flex items-center justify-between gap-2 w-full py-1.5 cursor-default"
+              className="flex items-center justify-between gap-2 w-full py-1.5 cursor-pointer"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              <Label htmlFor="dark-mode">Night Mode</Label>
+              <span>Night Mode</span>
               <Switch
                 id="dark-mode"
                 checked={theme === "dark"}

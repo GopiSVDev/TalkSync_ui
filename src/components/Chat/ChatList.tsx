@@ -6,7 +6,7 @@ import { getAvatarColor } from "@/lib/avatarColor";
 interface ChatListProps {
   chats: Chat[];
   onSelect: (chat: Chat) => void;
-  selectedChat: Chat;
+  selectedChat: Chat | null;
 }
 
 export default function ChatList({
@@ -41,10 +41,10 @@ export default function ChatList({
               </div>
 
               {/* Chat Info */}
-              <div className="flex-1">
+              <div className="flex flex-col flex-1 min-w-0">
                 <div className="text-[16px] font-semibold text-foreground truncate flex justify-between items-center">
                   <p
-                    className={`${
+                    className={`truncate ${
                       selectedChat?.id == chat.id ? "text-white" : ""
                     }`}
                   >
@@ -58,13 +58,15 @@ export default function ChatList({
                     {chat.time}
                   </p>
                 </div>
-                <div
-                  className={`text-sm text-muted-foreground truncate ${
-                    selectedChat?.id == chat.id ? "text-white" : ""
-                  }`}
-                >
-                  {chat.lastMessage || "No messages yet"}
-                </div>
+                {chat.lastMessage && (
+                  <div
+                    className={`text-sm text-muted-foreground truncate ${
+                      selectedChat?.id == chat.id ? "text-white" : ""
+                    }`}
+                  >
+                    {chat.lastMessage}
+                  </div>
+                )}
               </div>
             </div>
           </Card>

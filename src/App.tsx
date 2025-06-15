@@ -42,7 +42,7 @@ export default function App() {
           <ResizablePanel
             defaultSize={30}
             minSize={20}
-            maxSize={33}
+            maxSize={30}
             className="border-r bg-white dark:bg-[#212121] z-10"
           >
             <ChatList
