@@ -21,7 +21,7 @@ export function DropDownMenu() {
           className="cursor-pointer bg-white hover:bg-[rgba(244,244,245)] dark:bg-[#212121] dark:hover:bg-[rgba(44,44,44)]"
           variant="secondary"
         >
-          <AlignJustify />
+          <AlignJustify className="!h-5 !w-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

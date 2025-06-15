@@ -68,7 +68,7 @@ export default function App() {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-      <div className="h-screen w-full flex flex-col md:hidden bg-white dark:bg-[#212121]">
+      <div className="chat-bg h-screen w-full flex flex-col md:hidden">
         {!selectedChat ? (
           <ChatList
             chats={mockChats}

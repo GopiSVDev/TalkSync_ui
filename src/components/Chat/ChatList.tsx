@@ -15,7 +15,7 @@ export default function ChatList({
   selectedChat,
 }: ChatListProps) {
   return (
-    <div className="h-full flex flex-col gap-2">
+    <div className="h-full flex flex-col gap-2 bg-white dark:bg-[#212121] z-10">
       <div className="p-4 font-semibold text-lg border-b">
         <DropDownMenu />
       </div>
