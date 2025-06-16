@@ -12,11 +12,13 @@ const ChatCard = ({
   selectedChat: Chat | null;
   onSelect: (chat: Chat) => void;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const rippleRef = useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>;
 
   const handleRipple = (
     e: React.MouseEvent<HTMLDivElement>,
-    ref: React.RefObject<HTMLDivElement> | null
+    ref: React.RefObject<HTMLDivElement>
   ) => {
     const target = ref?.current;
     if (!target) return;
@@ -47,55 +49,59 @@ const ChatCard = ({
 
   return (
     <Card
-      ref={ref}
       key={chat.id}
       className={`relative overflow-hidden px-4 py-2 cursor-pointer border-none h-[84px] bg-white dark:bg-[#212121] ${
         selectedChat?.id === chat.id
           ? "bg-[#3390ec] dark:bg-[#766ac8]"
           : "hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
       }`}
-      onClick={(e) => {
-        handleRipple(e, ref);
-        onSelect(chat);
-      }}
+      onClick={() => onSelect(chat)}
     >
-      <div className="flex items-center gap-4 h-full">
-        {/* Avatar / Logo */}
-        <div
-          className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
-            chat.name
-          )}`}
-        >
-          {chat.name[0]}
-        </div>
-
-        {/* Chat Info */}
-        <div className="flex flex-col flex-1 min-w-0">
-          <div className="text-[16px] font-semibold text-foreground truncate flex justify-between items-center">
-            <p
-              className={`truncate ${
-                selectedChat?.id == chat.id ? "text-white" : ""
-              }`}
-            >
-              {chat.name}
-            </p>
-            <p
-              className={`text-[12px] font-light ${
-                selectedChat?.id == chat.id ? "text-white" : ""
-              }`}
-            >
-              {chat.time}
-            </p>
+      <div
+        ref={rippleRef}
+        onClick={(e) => {
+          handleRipple(e, rippleRef);
+          onSelect(chat);
+        }}
+      >
+        <div className="flex items-center gap-4 h-full">
+          {/* Avatar / Logo */}
+          <div
+            className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
+              chat.name
+            )}`}
+          >
+            {chat.name[0]}
           </div>
-          {chat.lastMessage && (
-            <div
-              className={`text-sm text-muted-foreground truncate ${
-                selectedChat?.id == chat.id ? "text-white" : ""
-              }`}
-            >
-              {chat.lastMessage}
+
+          {/* Chat Info */}
+          <div className="flex flex-col flex-1 min-w-0">
+            <div className="text-[16px] font-semibold text-foreground truncate flex justify-between items-center">
+              <p
+                className={`truncate ${
+                  selectedChat?.id == chat.id ? "text-white" : ""
+                }`}
+              >
+                {chat.name}
+              </p>
+              <p
+                className={`text-[12px] font-light ${
+                  selectedChat?.id == chat.id ? "text-white" : ""
+                }`}
+              >
+                {chat.time}
+              </p>
             </div>
-          )}
+            {chat.lastMessage && (
+              <div
+                className={`text-sm text-muted-foreground truncate ${
+                  selectedChat?.id == chat.id ? "text-white" : ""
+                }`}
+              >
+                {chat.lastMessage}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Card>
