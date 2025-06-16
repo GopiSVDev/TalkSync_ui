@@ -130,6 +130,23 @@ body {
   }
 }
 
+@layer utilities {
+  .animate-ripple {
+    animation: ripple 0.8s linear;
+  }
+
+  @keyframes ripple {
+    0% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+}
+
 .chat-bg {
   @apply relative flex-1 flex-col bg-cover bg-no-repeat bg-center;
   background-image: url("/bg.png");
