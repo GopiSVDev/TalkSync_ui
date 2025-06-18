@@ -1,7 +1,18 @@
 export interface Chat {
   id: string;
+  name?: string; // group name or null for DMs
+  avatarUrl?: string;
+  isGroup: boolean;
+  participantIds: string[]; // array of user IDs
+  lastMessageId?: string; // useful for preview
+  createdAt: string;
+}
+
+// frontend stuff
+export interface ChatPreview {
+  id: string;
   name: string;
-  lastMessage: string;
   avatarUrl: string;
+  lastMessage: string;
   time: string;
 }

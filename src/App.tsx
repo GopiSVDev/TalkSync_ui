@@ -1,6 +1,6 @@
 import ChatList from "@/components/Chat/ChatList";
 import ChatWindow from "@/components/Chat/ChatWindow";
-import type { Chat } from "@/types/Chat";
+import type { Chat } from "@/types/chat";
 import { useState } from "react";
 import {
   ResizableHandle,

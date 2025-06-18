@@ -1,7 +1,8 @@
+import type { Message } from "@/types/message";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
 
-export function groupMessagesByDate(messages) {
-  const grouped = {};
+export function groupMessagesByDate(messages: Message[]) {
+  const grouped: Record<string, Message[]> = {};
 
   messages.forEach((msg) => {
     const date = parseISO(msg.createdAt);

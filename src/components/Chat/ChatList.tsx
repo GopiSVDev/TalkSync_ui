@@ -1,6 +1,6 @@
-import type { Chat } from "@/types/Chat";
 import { DropDownMenu } from "./ChatListHeader/DropDownMenu";
 import ChatCard from "./ChatCard";
+import type { Chat } from "@/types/chat";
 
 interface ChatListProps {
   chats: Chat[];

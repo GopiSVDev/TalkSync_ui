@@ -3,6 +3,8 @@ import type { ChatWindowProps } from "../ChatWindow";
 import { getAvatarColor } from "@/lib/avatarColor";
 
 const ChatWindowHeader = ({ chat, onBack }: ChatWindowProps) => {
+  if (!chat) return;
+
   return (
     <div className="w-full p-4 border-b flex items-center gap-4 bg-white dark:bg-[#212121]">
       <ArrowLeft

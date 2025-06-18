@@ -5,14 +5,20 @@ import { useRef, useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTheme } from "@/hooks/use-theme";
+import type { EmojiPickerEmoji } from "@/types/emoji";
+import type { Message } from "@/types/message";
 
-const ChatInputWithButton = ({ setMessages }) => {
+const ChatInputWithButton = ({
+  setMessages,
+}: {
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+}) => {
   const { theme } = useTheme();
   const [msg, setMsg] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const insertEmojiAtCursor = (emoji: any) => {
+  const insertEmojiAtCursor = (emoji: EmojiPickerEmoji) => {
     const emojiChar = emoji.native;
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -23,7 +29,6 @@ const ChatInputWithButton = ({ setMessages }) => {
 
     setMsg(newValue);
 
-    // update cursor position after emoji
     setTimeout(() => {
       textarea.focus();
       textarea.selectionStart = textarea.selectionEnd =
@@ -33,9 +38,10 @@ const ChatInputWithButton = ({ setMessages }) => {
 
   const currentUserId = "user_1";
 
-  function sendMessage(text) {
+  function sendMessage(text: string) {
     const newMessage = {
-      id: Date.now(),
+      id: Date.now().toString(),
+      chatId: "1",
       senderId: currentUserId,
       text,
       createdAt: new Date().toISOString(),
