@@ -4,8 +4,10 @@ import { SendHorizonal, Smile } from "lucide-react";
 import { useRef, useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { useTheme } from "@/hooks/use-theme";
 
 const ChatInputWithButton = ({ setMessages }) => {
+  const { theme } = useTheme();
   const [msg, setMsg] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -61,7 +63,9 @@ const ChatInputWithButton = ({ setMessages }) => {
               <Picker
                 data={data}
                 onEmojiSelect={insertEmojiAtCursor}
-                theme="light"
+                theme={theme === "dark" ? "dark" : "light"}
+                skinTonePosition="none"
+                previewPosition="none"
               />
             </div>
           )}
