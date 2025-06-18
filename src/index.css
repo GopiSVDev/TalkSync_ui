@@ -169,3 +169,11 @@ body {
   @apply absolute inset-0 bg-repeat opacity-100 pointer-events-none;
   background-image: url("/bg-pattern-dark.png");
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
