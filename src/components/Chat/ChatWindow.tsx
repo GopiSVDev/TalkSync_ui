@@ -1,103 +1,127 @@
 import type { Chat } from "@/types/Chat";
-import { ArrowLeft, SendHorizonal, Smile } from "lucide-react";
-import { getAvatarColor } from "@/lib/avatarColor";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import ChatWindowHeader from "./ChatWindow/ChatWindowHeader";
+import MessagesWindow from "./ChatWindow/MessagesWindow";
+import ChatInputWithButton from "./ChatWindow/ChatInputWithButton";
+import { useEffect, useState } from "react";
 
-interface ChatWindowProps {
+export interface ChatWindowProps {
   chat: Chat | null;
   onBack: () => void;
 }
 
 const messages = [
-  { id: 1, senderId: "user_123", text: "Hello!" },
-  { id: 2, senderId: "user_456", text: "Hey there!" },
-  { id: 3, senderId: "user_123", text: "How are you?" },
-  { id: 4, senderId: "user_456", text: "I’m good, thanks!" },
-  { id: 1, senderId: "user_123", text: "Hello!" },
-  { id: 2, senderId: "user_456", text: "Hey there!" },
-  { id: 3, senderId: "user_123", text: "How are you?" },
-  { id: 4, senderId: "user_456", text: "I’m good, thanks!" },
-  { id: 1, senderId: "user_123", text: "Hello!" },
-  { id: 2, senderId: "user_456", text: "Hey there!" },
-  { id: 3, senderId: "user_123", text: "How are you?" },
-  { id: 4, senderId: "user_456", text: "I’m good, thanks!" },
-  { id: 1, senderId: "user_123", text: "Hello!" },
-  { id: 2, senderId: "user_456", text: "Hey there!" },
-  { id: 3, senderId: "user_123", text: "How are you?" },
-  { id: 4, senderId: "user_456", text: "I’m good, thanks!" },
-  { id: 1, senderId: "user_123", text: "Hello!" },
-  { id: 2, senderId: "user_456", text: "Hey there!" },
-  { id: 3, senderId: "user_123", text: "How are you?" },
-  { id: 4, senderId: "user_456", text: "I’m good, thanks!" },
+  // 🗓️ June 15, 2025
+  {
+    id: 1,
+    senderId: "user_1",
+    text: "Hey there!",
+    createdAt: "2025-06-15T09:02:00Z",
+  },
+  {
+    id: 2,
+    senderId: "user_2",
+    text: "Hi! How’s your weekend?",
+    createdAt: "2025-06-15T09:03:10Z",
+  },
+
+  // 🗓️ June 16, 2025
+  {
+    id: 3,
+    senderId: "user_1",
+    text: "Pretty good. You?",
+    createdAt: "2025-06-16T14:12:00Z",
+  },
+  {
+    id: 4,
+    senderId: "user_2",
+    text: "Just got back from a trip.",
+    createdAt: "2025-06-16T14:13:22Z",
+  },
+  {
+    id: 5,
+    senderId: "user_2",
+    text: "Lots to catch up on.",
+    createdAt: "2025-06-16T14:14:01Z",
+  },
+
+  // 🗓️ June 17, 2025
+  {
+    id: 6,
+    senderId: "user_1",
+    text: "Want to call later?",
+    createdAt: "2025-06-17T18:45:00Z",
+  },
+  {
+    id: 7,
+    senderId: "user_2",
+    text: "Sure, around 8?",
+    createdAt: "2025-06-17T18:47:00Z",
+  },
+
+  // 🗓️ June 18, 2025
+  {
+    id: 8,
+    senderId: "user_1",
+    text: "Thanks for the talk last night.",
+    createdAt: "2025-06-18T08:30:00Z",
+  },
+  {
+    id: 9,
+    senderId: "user_2",
+    text: "It really helped me.",
+    createdAt: "2025-06-18T08:31:30Z",
+  },
+  {
+    id: 10,
+    senderId: "user_1",
+    text: "Glad to hear ❤️",
+    createdAt: "2025-06-18T08:33:00Z",
+  },
 ];
-const currentUserId = "user_456";
+
+const currentUserId = "user_1";
 
 export default function ChatWindow({ chat, onBack }: ChatWindowProps) {
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      senderId: "user_2",
+      text: "Hey!",
+      createdAt: new Date().toISOString(),
+    },
+  ]);
+
+  useEffect(() => {
+    if (
+      messages.length > 0 &&
+      messages[messages.length - 1].senderId === currentUserId
+    ) {
+      const timeout = setTimeout(() => {
+        const botReply = {
+          id: Date.now() + 1,
+          senderId: "user_2",
+          text: "This is a fake reply!",
+          createdAt: new Date().toISOString(),
+        };
+        setMessages((prev) => [...prev, botReply]);
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [messages]);
+
   if (!chat) return null;
 
   return (
     <div className="h-screen flex flex-col items-center z-10">
-      <div className="w-full p-4 border-b flex items-center gap-4 bg-white dark:bg-[#212121]">
-        <ArrowLeft
-          onClick={onBack}
-          className="md:hidden cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
-          size={30}
-        />
-        <div
-          className={`w-[40px] h-[40px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
-            chat.name
-          )}`}
-        >
-          {chat.name[0]}
-        </div>
-        <div className="flex flex-col">
-          <div className="text-[16px] font-semibold">{chat.name}</div>
-          <div className="text-sm font-normal text-muted-foreground">
-            last seen recently
-          </div>
-        </div>
-      </div>
+      {/* Header with status */}
+      <ChatWindowHeader chat={chat} onBack={onBack} />
 
       {/* message window */}
-      <div className="flex-1 w-full max-w-[700px] p-4 text-muted-foreground overflow-y-auto scrollbar-hide">
-        {messages.map((msg) => {
-          const isSender = msg.senderId === currentUserId;
-
-          return (
-            <div
-              key={msg.id}
-              className={`flex ${
-                isSender ? "justify-end" : "justify-start"
-              } mb-2`}
-            >
-              <div
-                className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${
-                  isSender
-                    ? "bg-blue-500 text-white rounded-br-none"
-                    : "bg-gray-100 text-gray-800 rounded-bl-none"
-                }`}
-              >
-                {msg.text}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <MessagesWindow messages={messages} />
 
       {/* chat window input with send button */}
-      <div className="w-full items-center max-w-[700px] py-2 px-4 flex gap-2 h-auto">
-        <div className="bg-white dark:bg-[#212121] w-full flex items-center gap-1 px-4 rounded-3xl min-w-0">
-          <Smile className="text-gray-500" />
-          <Textarea
-            className="w-full py-4 px-3 h-fit border-none active:border-none resize-none overflow-y-auto max-h-40 break-words text-base dark:bg-[#212121]"
-            placeholder="Message"
-          />
-        </div>
-        <Button className="group cursor-pointer bg-white hover:bg-[#3390ec] dark:hover:bg-[#766ac8] dark:bg-[#212121] rounded-4xl h-[52px] w-[52px] overflow-hidden">
-          <SendHorizonal className="!h-5 !w-5 text-[#3390ec] fill-[#3390ec] group-hover:text-white group-hover:fill-white dark:text-[#766ac8] dark:fill-[#766ac8] dark:group-hover:text-white dark:group-hover:fill-white transition-colors duration-300" />
-        </Button>
-      </div>
+      <ChatInputWithButton setMessages={setMessages} />
     </div>
   );
 }
