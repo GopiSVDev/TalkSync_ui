@@ -78,7 +78,7 @@ const ChatInputWithButton = ({
         </div>
         <Textarea
           ref={textareaRef}
-          className="w-full py-4 px-3 h-fit border-none active:border-none resize-none overflow-y-auto max-h-40 break-words text-base dark:bg-[#212121]"
+          className="w-full py-4 px-3 h-fit border-none active:border-none resize-none overflow-y-auto max-h-40 break-words dark:bg-[#212121] text-[16px]"
           placeholder="Message"
           value={msg}
           onKeyDown={(e) => {

@@ -1,11 +1,11 @@
 import { DropDownMenu } from "./ChatListHeader/DropDownMenu";
 import ChatCard from "./ChatCard";
-import type { Chat } from "@/types/chat";
+import type { ChatPreview } from "@/types/chat";
 
 interface ChatListProps {
-  chats: Chat[];
-  onSelect: (chat: Chat) => void;
-  selectedChat: Chat | null;
+  chats: ChatPreview[];
+  onSelect: (chat: ChatPreview) => void;
+  selectedChat: ChatPreview | null;
 }
 
 export default function ChatList({

@@ -5,9 +5,9 @@ export interface Message {
   text?: string;
   createdAt: string;
 
-  mediaUrl?: string; // image, file, etc.
-  seenBy?: string[]; // array of userIds
+  mediaUrl?: string;
+  seenBy?: string[];
   reactions?: {
-    [emoji: string]: string[]; // { "❤️": ["user_1", "user_2"] }
+    [emoji: string]: string[];
   };
 }

@@ -1,6 +1,6 @@
 export interface Chat {
   id: string;
-  name?: string; // group name or null for DMs
+  name: string; // group name or null for DMs
   avatarUrl?: string;
   isGroup: boolean;
   participantIds: string[]; // array of user IDs

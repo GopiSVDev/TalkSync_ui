@@ -43,20 +43,20 @@ const MessagesWindow = ({ messages }: { messages: Message[] }) => {
                   } mb-2`}
                 >
                   <div
-                    className={`space-x-2 max-w-xs px-4 py-2 rounded-2xl text-sm ${
+                    className={`inline-block max-w-xs px-4 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap ${
                       isSender
                         ? "bg-[#EEFFDE] dark:bg-[#8373d3] text-black dark:text-white rounded-br-none"
                         : "bg-gray-100 dark:bg-[#212121] text-gray-800 dark:text-white rounded-bl-none"
                     }`}
                   >
-                    <span>{msg.text}</span>
-                    <span
-                      className={`text-xs text-gray-400 ${
-                        isSender ? "self-end" : "self-start"
-                      }`}
-                    >
-                      {format(new Date(msg.createdAt), "h:mm a")}
-                    </span>
+                    <div className="relative space-x-2">
+                      <span className="block break-words pr-12 text-[16px]">
+                        {msg.text}
+                      </span>
+                      <span className="absolute bottom-0 right-0 text-xs text-gray-400">
+                        {format(new Date(msg.createdAt), "h:mm a")}
+                      </span>
+                    </div>
                   </div>
                 </div>
               );

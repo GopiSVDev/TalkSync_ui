@@ -1,4 +1,4 @@
-import type { Chat } from "@/types/chat";
+import type { ChatPreview } from "@/types/chat";
 import { Card } from "../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/lib/avatarColor";
@@ -8,9 +8,9 @@ const ChatCard = ({
   selectedChat,
   onSelect,
 }: {
-  chat: Chat;
-  selectedChat: Chat | null;
-  onSelect: (chat: Chat) => void;
+  chat: ChatPreview;
+  selectedChat: ChatPreview | null;
+  onSelect: (chat: ChatPreview) => void;
 }) => {
   const rippleRef = useRef<HTMLDivElement>(
     null
@@ -47,13 +47,15 @@ const ChatCard = ({
     setTimeout(() => ripple.remove(), 600);
   };
 
+  if (!chat) return;
+
   return (
     <Card
       key={chat.id}
       className={`relative overflow-hidden px-4 py-2 cursor-pointer border-none h-[84px] bg-white dark:bg-[#212121] ${
         selectedChat?.id === chat.id
           ? "bg-[#3390ec] dark:bg-[#766ac8]"
-          : "hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
+          : "hover:bg-[rgb(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
       }`}
       onClick={() => onSelect(chat)}
     >
