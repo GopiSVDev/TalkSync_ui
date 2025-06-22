@@ -26,7 +26,14 @@ export default function SidebarContent({
       <ChatList chats={chats} onSelect={onSelect} selectedChat={selectedChat} />
     ),
     settings: <Settings />,
-    profile: <Profile />,
+    profile: (
+      <Profile
+        displayName="Gopi"
+        username="admin"
+        avatarUrl=""
+        isOnline={true}
+      />
+    ),
   };
 
   return (
@@ -35,14 +42,19 @@ export default function SidebarContent({
         {mode === "chats" ? (
           <DropDownMenu setMode={setMode} />
         ) : (
-          <ArrowLeft
-            className="cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
-            size={30}
-            onClick={() => setMode("chats")}
-          />
+          <div className="flex gap-4 items-center">
+            <ArrowLeft
+              className="cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
+              size={30}
+              onClick={() => setMode("chats")}
+            />
+            <p className="text-[20px]">
+              {mode.substring(0, 1).toUpperCase() + mode.substring(1)}
+            </p>
+          </div>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto px-2">{components[mode]}</div>
+      <div className="flex-1 overflow-y-auto">{components[mode]}</div>
     </div>
   );
 }
