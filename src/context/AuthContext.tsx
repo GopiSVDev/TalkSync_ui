@@ -1,7 +1,14 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface JwtPayload {
   exp?: number;
@@ -24,35 +31,67 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  const isTokenValid = (token: string) => {
-    try {
-      const decoded = jwtDecode<JwtPayload>(token);
-      if (!decoded.exp) return false;
-
-      const expiry = decoded.exp * 1000;
-      return Date.now() < expiry;
-    } catch {
-      return false;
-    }
-  };
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    if (savedToken && isTokenValid(savedToken)) {
-      setToken(savedToken);
-    } else {
+  const logout = useCallback(
+    (silent = false) => {
       localStorage.removeItem("token");
       setToken(null);
-    }
-    setIsLoading(false);
-  }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    navigate("/auth");
-    toast.success("Logged Out Successfully");
-  };
+      if (!silent) {
+        navigate("/");
+        toast.success("Logged Out Successfully");
+      }
+    },
+    [navigate]
+  );
+
+  const isTokenValid = useCallback(
+    (token: string) => {
+      try {
+        const decoded = jwtDecode<JwtPayload>(token);
+        if (!decoded.exp) return false;
+        const expiry = decoded.exp * 1000;
+        const now = Date.now();
+
+        if (now >= expiry) {
+          logout(true);
+          return false;
+        }
+
+        return now < expiry;
+      } catch {
+        return false;
+      }
+    },
+    [logout]
+  );
+
+  useEffect(() => {
+    const validateToken = () => {
+      const token = localStorage.getItem("token");
+
+      if (!token || !isTokenValid(token)) {
+        logout(true);
+        return false;
+      }
+
+      setToken(token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      return true;
+    };
+
+    validateToken();
+    setIsLoading(false);
+
+    const interval = setInterval(() => {
+      const stillValid = validateToken();
+
+      if (!stillValid) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isTokenValid, logout, token]);
 
   const isAuthenticated = Boolean(token);
 

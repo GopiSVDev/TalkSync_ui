@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/use-theme";
 import {
   AlignJustify,
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 
 export function DropDownMenu() {
+  const { logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const items = [
     {
@@ -77,7 +79,10 @@ export function DropDownMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="font-medium cursor-pointer data-[highlighted]:bg-gray-200/70 dark:hover:bg-black/30">
+        <DropdownMenuItem
+          className="font-medium cursor-pointer data-[highlighted]:bg-gray-200/70 dark:hover:bg-black/30"
+          onClick={() => logout()}
+        >
           <LogOut />
           Log out
         </DropdownMenuItem>

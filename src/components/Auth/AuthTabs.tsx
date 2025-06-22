@@ -1,8 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
+import { useEffect } from "react";
 
 function AuthTabs() {
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+  }, []);
+
   return (
     <Tabs defaultValue="login" className="w-full max-w-[400px] mb-5">
       <TabsList className="grid w-full grid-cols-2">

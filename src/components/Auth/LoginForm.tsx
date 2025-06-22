@@ -60,14 +60,16 @@ const LoginForm = () => {
     setErrorMsg(null);
 
     try {
-      const token = await login({
+      const { token } = await login({
         username: formValues.username,
         password: formValues.password,
       });
 
       localStorage.setItem("token", token);
       setToken(token);
+
       toast.success("Login Successful");
+
       setFormValues({
         username: "",
         password: "",
@@ -86,7 +88,7 @@ const LoginForm = () => {
     setGuestLoading(true);
 
     try {
-      const token = await guest();
+      const { token } = await guest();
 
       localStorage.setItem("token", token);
       setToken(token);
