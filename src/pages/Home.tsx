@@ -1,5 +1,5 @@
-import ChatList from "@/components/Chat/ChatList";
-import ChatWindow from "@/components/Chat/ChatWindow";
+import SidebarContent from "@/components/Main/SidebarContent";
+import ChatWindow from "@/components/Main/ChatWindow";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -33,7 +33,13 @@ const mockChats: ChatPreview[] = [
 ];
 
 const Home = () => {
+  const [chats, setChats] = useState<ChatPreview[]>(mockChats);
+
   const [selectedChat, setSelectedChat] = useState<ChatPreview | null>(null);
+
+  const [sidebarMode, setSidebarMode] = useState<
+    "chats" | "profile" | "settings"
+  >("chats");
 
   return (
     <>
@@ -45,8 +51,11 @@ const Home = () => {
             maxSize={30}
             className="border-r bg-white dark:bg-[#212121] z-10"
           >
-            <ChatList
-              chats={mockChats}
+            {/* Side bar contents */}
+            <SidebarContent
+              mode={sidebarMode}
+              setMode={setSidebarMode}
+              chats={chats}
               onSelect={setSelectedChat}
               selectedChat={selectedChat}
             />
@@ -70,8 +79,10 @@ const Home = () => {
       </div>
       <div className="chat-bg h-screen w-full flex flex-col md:hidden">
         {!selectedChat ? (
-          <ChatList
-            chats={mockChats}
+          <SidebarContent
+            mode={sidebarMode}
+            setMode={setSidebarMode}
+            chats={chats}
             onSelect={setSelectedChat}
             selectedChat={selectedChat}
           />

@@ -51,7 +51,7 @@ const MessagesWindow = ({ messages }: { messages: Message[] }) => {
                   >
                     <div className="relative space-x-2">
                       <span className="block break-words pr-12 text-[16px]">
-                        {msg.text}
+                        {msg.content}
                       </span>
                       <span className="absolute bottom-0 right-0 text-xs text-gray-400">
                         {format(new Date(msg.createdAt), "h:mm a")}

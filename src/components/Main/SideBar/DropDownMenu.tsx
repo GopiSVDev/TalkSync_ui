@@ -18,17 +18,25 @@ import {
   UserRound,
 } from "lucide-react";
 
-export function DropDownMenu() {
+export function DropDownMenu({
+  setMode,
+}: {
+  setMode: React.Dispatch<
+    React.SetStateAction<"chats" | "settings" | "profile">
+  >;
+}) {
   const { logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const items = [
     {
       name: "Profile",
       Icon: <UserRound />,
+      onClick: () => setMode("profile"),
     },
     {
       name: "Settings",
       Icon: <Settings />,
+      onClick: () => setMode("settings"),
     },
   ];
 
@@ -47,9 +55,10 @@ export function DropDownMenu() {
         align="start"
       >
         <DropdownMenuGroup className="font-medium">
-          {items.map(({ Icon, name }) => (
+          {items.map(({ Icon, name, onClick }) => (
             <DropdownMenuItem
               key={name}
+              onClick={onClick}
               className="cursor-pointer gap-2 flex justify-start items-center data-[highlighted]:bg-gray-200/70 dark:hover:bg-black/30"
             >
               <span className="text-black">{Icon}</span>

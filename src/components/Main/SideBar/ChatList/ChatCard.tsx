@@ -1,5 +1,5 @@
 import type { ChatPreview } from "@/types/chat";
-import { Card } from "../ui/card";
+import { Card } from "../../../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/lib/avatarColor";
 

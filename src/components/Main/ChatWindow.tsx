@@ -88,8 +88,14 @@ export default function ChatWindow({ chat, onBack }: ChatWindowProps) {
       id: "1",
       chatId: "1",
       senderId: "user_2",
-      text: "Hey!",
+      content: "Hey!",
       createdAt: new Date().toISOString(),
+      seenBy: [
+        {
+          userId: "user1",
+          seenAt: new Date().toISOString(),
+        },
+      ],
     },
   ]);
 
@@ -103,8 +109,16 @@ export default function ChatWindow({ chat, onBack }: ChatWindowProps) {
           id: (Date.now() + 1).toString(),
           chatId: "1",
           senderId: "user_2",
-          text: "This is a fake reply!",
+
+          content: "This is a fake reply!",
           createdAt: new Date().toISOString(),
+
+          seenBy: [
+            {
+              userId: "user1",
+              seenAt: new Date().toISOString(),
+            },
+          ],
         };
         setMessages((prev) => [...prev, botReply]);
       }, 1000);

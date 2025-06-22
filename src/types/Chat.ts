@@ -16,3 +16,9 @@ export interface ChatPreview {
   lastMessage: string;
   time: string;
 }
+
+export interface ChatListProps {
+  chats: ChatPreview[];
+  onSelect: (chat: ChatPreview) => void;
+  selectedChat: ChatPreview | null;
+}
