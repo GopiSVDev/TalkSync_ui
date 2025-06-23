@@ -14,64 +14,69 @@ const Profile = ({
 
   if (!user) return;
 
-  const { displayName, avatarUrl, username, isOnline } = user;
+  const { displayName, username, isOnline, avatarUrl } = user;
 
   const getInitial = () => displayName?.charAt(0)?.toUpperCase() || "?";
 
   return (
-    <Card className="text-foreground w-full overflow-hidden dark:bg-[#212121]">
+    <Card className="text-foreground w-full max-w-md mx-auto rounded-2xl shadow-md dark:bg-[#1e1e1e] bg-white overflow-hidden">
       {/* Avatar */}
       {avatarUrl ? (
         <img
           src={avatarUrl}
           alt="Avatar"
-          className="w-full h-[300px] object-contain overflow-hidden"
+          className="w-full h-[260px] object-cover bg-muted"
         />
       ) : (
-        <div className="w-full h-[300px] bg-[linear-gradient(rgb(255,255,255)-125%,rgb(64,138,207))] flex items-center justify-center text-3xl font-bold text-black dark:text-white">
+        <div className="w-full h-[260px] bg-gradient-to-br from-blue-300 to-blue-600 dark:from-purple-600 dark:to-purple-900 flex items-center justify-center text-6xl font-semibold text-white">
           {getInitial()}
         </div>
       )}
 
       {/* Name & Username */}
-      <CardHeader>
-        <CardTitle className="text-xl">Your Profile</CardTitle>
+      <CardHeader className="pt-6 pb-0">
+        <CardTitle className="text-2xl font-semibold tracking-tight">
+          Your Profile
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6 text-base">
-        <div className="flex items-center gap-3">
-          <User className="text-muted-foreground" size={20} />
+
+      <CardContent className="space-y-5 py-6">
+        <div className="flex items-center gap-4">
+          <User className="text-muted-foreground" size={22} />
           <div>
-            <Label className="text-muted-foreground">Display Name</Label>
+            <Label className="text-sm text-muted-foreground">
+              Display Name
+            </Label>
             <p className="text-lg font-medium">{displayName}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <AtSign className="text-muted-foreground" size={20} />
+        <div className="flex items-center gap-4">
+          <AtSign className="text-muted-foreground" size={22} />
           <div>
-            <Label className="text-muted-foreground">Username</Label>
+            <Label className="text-sm text-muted-foreground">Username</Label>
             <p className="text-lg font-medium">@{username}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <CircleDot
             className={isOnline ? "text-green-500" : "text-gray-400"}
-            size={20}
+            size={22}
           />
           <div>
-            <Label className="text-muted-foreground">Status</Label>
+            <Label className="text-sm text-muted-foreground">Status</Label>
             <p className="text-lg font-medium">
               {isOnline ? "Online" : "Unknown"}
             </p>
           </div>
         </div>
       </CardContent>
-      {/* Optional: Add buttons or profile settings */}
-      <div className="mt-6 w-full flex flex-col gap-2">
+
+      <div className="px-6 pb-6">
         <button
           onClick={() => setMode("settings")}
-          className="w-full cursor-pointer py-2 rounded text-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-purple-600 dark:hover:bg-purple-700"
+          className="w-full cursor-pointer py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 dark:from-purple-600 dark:to-purple-800 dark:hover:from-purple-700 dark:hover:to-purple-900 transition-all duration-200"
         >
           Edit Profile
         </button>
