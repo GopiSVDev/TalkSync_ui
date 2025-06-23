@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import type { UserResponse } from "@/api/authApi";
 
 interface JwtPayload {
   exp?: number;
@@ -20,6 +21,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   logout: () => void;
   isLoading: boolean;
+  user: UserResponse | null;
+  setUser: (user: UserResponse | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +31,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserResponse | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -35,6 +40,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     (silent = false) => {
       localStorage.removeItem("token");
       setToken(null);
+
+      localStorage.removeItem("user");
+      setUser(null);
 
       if (!silent) {
         navigate("/");
@@ -68,6 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const validateToken = () => {
       const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
 
       if (!token || !isTokenValid(token)) {
         logout(true);
@@ -75,6 +84,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       setToken(token);
+      setUser(user ? JSON.parse(user) : null);
+
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       return true;
     };
@@ -97,7 +108,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ token, setToken, isAuthenticated, logout, isLoading }}
+      value={{
+        token,
+        setToken,
+        user,
+        setUser,
+        isAuthenticated,
+        logout,
+        isLoading,
+      }}
     >
       {children}
     </AuthContext.Provider>

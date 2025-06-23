@@ -14,7 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -60,12 +60,13 @@ const LoginForm = () => {
     setErrorMsg(null);
 
     try {
-      const { token } = await login({
+      const { token, user } = await login({
         username: formValues.username,
         password: formValues.password,
       });
 
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       setToken(token);
 
       toast.success("Login Successful");
@@ -88,10 +89,13 @@ const LoginForm = () => {
     setGuestLoading(true);
 
     try {
-      const { token } = await guest();
+      const { token, user } = await guest();
 
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
       setToken(token);
+      setUser(user);
 
       toast.success("Guest Login Successful");
 

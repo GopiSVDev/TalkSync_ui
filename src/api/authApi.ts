@@ -11,7 +11,7 @@ interface LoginPayload {
   password: string;
 }
 
-interface UserResponse {
+export interface UserResponse {
   id: string;
   username: string;
   displayName: string;

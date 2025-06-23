@@ -26,14 +26,7 @@ export default function SidebarContent({
       <ChatList chats={chats} onSelect={onSelect} selectedChat={selectedChat} />
     ),
     settings: <Settings />,
-    profile: (
-      <Profile
-        displayName="Gopi"
-        username="admin"
-        avatarUrl=""
-        isOnline={true}
-      />
-    ),
+    profile: <Profile setMode={setMode} />,
   };
 
   return (

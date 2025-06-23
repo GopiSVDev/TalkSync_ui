@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
 const RegisterForm = () => {
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
 
   const [formValues, setFormValues] = useState({
     username: "",
@@ -94,14 +94,17 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      const { token } = await register({
+      const { token, user } = await register({
         username: formValues.username,
         displayName: formValues.displayName,
         password: formValues.password,
       });
 
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
       setToken(token);
+      setUser(user);
 
       toast.success("Registration successful!");
 
@@ -113,7 +116,7 @@ const RegisterForm = () => {
         password: "",
         confirmPassword: "",
       });
-      
+
       setErrors({});
     } catch (error) {
       if (axios.isAxiosError(error)) {
