@@ -23,7 +23,7 @@ const Settings = ({
   setMode,
 }: {
   setMode: React.Dispatch<
-    React.SetStateAction<"chats" | "settings" | "profile">
+    React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
 }) => {
   const { user, setUser, logout } = useAuth();

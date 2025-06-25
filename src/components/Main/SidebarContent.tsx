@@ -3,9 +3,10 @@ import ChatList from "./SideBar/ChatList/ChatList";
 import type { ChatPreview } from "@/types/chat";
 import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
-import type { JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/SearchBar";
+import Search from "./SideBar/Search";
 
 export default function SidebarContent({
   mode,
@@ -16,18 +17,25 @@ export default function SidebarContent({
 }: {
   mode: string;
   setMode: React.Dispatch<
-    React.SetStateAction<"chats" | "settings" | "profile">
+    React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
   chats: ChatPreview[];
   onSelect: (chat: ChatPreview) => void;
   selectedChat: ChatPreview | null;
 }) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    console.log("Updated query:", searchQuery);
+  }, [searchQuery]);
+
   const components: Record<string, JSX.Element> = {
     chats: (
       <ChatList chats={chats} onSelect={onSelect} selectedChat={selectedChat} />
     ),
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
+    search: <Search />,
   };
 
   return (
@@ -36,7 +44,24 @@ export default function SidebarContent({
         {mode === "chats" ? (
           <div className="flex items-center gap-2">
             <DropDownMenu setMode={setMode} />
-            <SearchBar />
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              setMode={setMode}
+            />
+          </div>
+        ) : mode == "search" ? (
+          <div className="flex items-center gap-2">
+            <ArrowLeft
+              className="cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
+              size={35}
+              onClick={() => setMode("chats")}
+            />
+            <SearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              setMode={setMode}
+            />
           </div>
         ) : (
           <div className="flex gap-4 items-center">

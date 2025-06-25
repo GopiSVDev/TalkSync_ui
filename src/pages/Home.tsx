@@ -38,7 +38,7 @@ const Home = () => {
   const [selectedChat, setSelectedChat] = useState<ChatPreview | null>(null);
 
   const [sidebarMode, setSidebarMode] = useState<
-    "chats" | "profile" | "settings"
+    "chats" | "profile" | "settings" | "search"
   >("chats");
 
   return (
