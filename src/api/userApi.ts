@@ -25,6 +25,13 @@ interface LoginResponse {
   user: UserResponse;
 }
 
+export interface UpdateProfilePayload {
+  id: string;
+  displayName?: string;
+  avatarUrl?: string;
+  password?: string;
+}
+
 export const register = async (
   data: RegisterPayload
 ): Promise<LoginResponse> => {
@@ -39,5 +46,10 @@ export const login = async (data: LoginPayload): Promise<LoginResponse> => {
 
 export const guest = async (): Promise<LoginResponse> => {
   const response = await axios.post("/auth/guest");
+  return response.data;
+};
+
+export const updateProfile = async (data: UpdateProfilePayload) => {
+  const response = await axios.post("/user/update", data);
   return response.data;
 };

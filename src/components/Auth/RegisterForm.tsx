@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { register } from "@/api/authApi";
+import { register } from "@/api/userApi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";

@@ -1,3 +1,4 @@
+import { updateProfile, type UpdateProfilePayload } from "@/api/userApi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,8 +15,14 @@ function validateImageUrl(url: string): Promise<boolean> {
   });
 }
 
-const Settings = () => {
-  const { user } = useAuth();
+const Settings = ({
+  setMode,
+}: {
+  setMode: React.Dispatch<
+    React.SetStateAction<"chats" | "settings" | "profile">
+  >;
+}) => {
+  const { user, setUser } = useAuth();
 
   const [displayName, setDisplayName] = useState(user?.displayName);
   const [password, setPassword] = useState("");
@@ -35,10 +42,47 @@ const Settings = () => {
 
   if (!user) return;
 
-  const handleSave = () =>
-    isValidImage
-      ? toast.success("Profile updated successfully.")
-      : toast.error("Please provide a valid image URL.");
+  const handleSave = async () => {
+    const updates: UpdateProfilePayload = { id: user.id };
+
+    if (displayName && displayName.trim() !== user.displayName) {
+      updates.displayName = displayName;
+    }
+
+    if (avatarUrl.trim() && avatarUrl !== user.avatarUrl) {
+      if (!isValidImage) {
+        toast.error("Invalid Image Url");
+        return;
+      }
+
+      updates.avatarUrl = avatarUrl;
+    }
+
+    if (password && password.length > 0) {
+      if (password.length < 8) {
+        toast.error("Password must be at least 8 characters");
+        return;
+      }
+      updates.password = password;
+    }
+
+    const hasChanges = Object.keys(updates).length > 1;
+
+    if (!hasChanges) {
+      toast.info("No changes to save");
+      return;
+    }
+
+    try {
+      const updatedUser = await updateProfile(updates);
+      setUser(updatedUser);
+
+      setMode("profile");
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      if (error instanceof Error) toast.error("Failed To Update Profile");
+    }
+  };
 
   const handleDeleteAccount = () =>
     toast("Account deletion not yet implemented.");
@@ -54,24 +98,26 @@ const Settings = () => {
         </p>
       </CardHeader>
 
-      <CardContent className="space-y-5 py-4">
+      <CardContent className="space-y-5 py-4 dark:bg-[#1e1e1e] bg-white">
         {/* Avatar Preview */}
-        <div className="w-full h-[260px] rounded-xl overflow-hidden flex items-center justify-center bg-muted border">
-          {avatarUrl && isValidImage ? (
-            <img
-              src={avatarUrl}
-              alt="Avatar Preview"
-              className="w-full h-full object-cover"
-            />
-          ) : avatarUrl ? (
-            <div className="text-center text-red-500 text-sm">
-              Invalid image URL
-            </div>
-          ) : (
-            <div className="text-center text-muted-foreground text-sm">
-              Image preview will appear here
-            </div>
-          )}
+        <div className="w-full h-[260px] overflow-hidden flex items-center justify-center dark:bg-[#1e1e1e] bg-white">
+          <div className="h-[260px] w-[260px] rounded-xl overflow-hidden">
+            {avatarUrl && isValidImage ? (
+              <img
+                src={avatarUrl}
+                alt="Avatar Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : avatarUrl ? (
+              <div className="text-center text-red-500 text-sm">
+                Invalid image URL
+              </div>
+            ) : (
+              <div className="text-center text-muted-foreground text-sm">
+                Image preview will appear here
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Display Name */}

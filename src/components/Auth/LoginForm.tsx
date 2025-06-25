@@ -8,7 +8,7 @@ import {
 } from "../ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { login, guest } from "@/api/authApi";
+import { login, guest } from "@/api/userApi";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";

@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import type { UserResponse } from "@/api/authApi";
+import type { UserResponse } from "@/api/userApi";
 
 interface JwtPayload {
   exp?: number;
@@ -103,6 +103,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     return () => clearInterval(interval);
   }, [isTokenValid, logout, token]);
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+  }, [user]);
 
   const isAuthenticated = Boolean(token);
 

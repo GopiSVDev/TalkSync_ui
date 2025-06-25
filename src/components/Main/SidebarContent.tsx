@@ -25,7 +25,7 @@ export default function SidebarContent({
     chats: (
       <ChatList chats={chats} onSelect={onSelect} selectedChat={selectedChat} />
     ),
-    settings: <Settings />,
+    settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
   };
 

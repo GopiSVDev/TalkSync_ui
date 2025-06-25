@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { AtSign, CircleDot, User } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Profile = ({
   setMode,
@@ -12,26 +13,37 @@ const Profile = ({
 }) => {
   const { user } = useAuth();
 
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || "");
+  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  const [username, setUsername] = useState(user?.username || "");
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    setAvatarUrl(user?.avatarUrl || "");
+    setDisplayName(user?.displayName || "");
+    setUsername(user?.username || "");
+    setIsOnline(true);
+  }, [user]);
+
   if (!user) return;
-
-  const { displayName, username, isOnline, avatarUrl } = user;
-
   const getInitial = () => displayName?.charAt(0)?.toUpperCase() || "?";
 
   return (
     <Card className="text-foreground w-full max-w-md mx-auto rounded-2xl shadow-md dark:bg-[#1e1e1e] bg-white overflow-hidden">
       {/* Avatar */}
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt="Avatar"
-          className="w-full h-[260px] object-cover bg-muted"
-        />
-      ) : (
-        <div className="w-full h-[260px] bg-gradient-to-br from-blue-300 to-blue-600 dark:from-purple-600 dark:to-purple-900 flex items-center justify-center text-6xl font-semibold text-white">
-          {getInitial()}
-        </div>
-      )}
+      <div className="flex w-full justify-center rounded-2xl overflow-hidden">
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt="Avatar"
+            className="w-[260px] h-[260px] object-cover bg-muted"
+          />
+        ) : (
+          <div className="w-[260px] h-[260px] bg-gradient-to-br from-blue-300 to-blue-600 dark:from-purple-600 dark:to-purple-900 flex items-center justify-center text-6xl font-semibold text-white">
+            {getInitial()}
+          </div>
+        )}
+      </div>
 
       {/* Name & Username */}
       <CardHeader className="pt-6 pb-0">
@@ -66,8 +78,12 @@ const Profile = ({
           />
           <div>
             <Label className="text-sm text-muted-foreground">Status</Label>
-            <p className="text-lg font-medium">
-              {isOnline ? "Online" : "Unknown"}
+            <p
+              className={`text-lg font-medium ${
+                isOnline ? "text-green-500" : "text-gray-400"
+              }`}
+            >
+              {isOnline ? "Online" : "Offline"}
             </p>
           </div>
         </div>
