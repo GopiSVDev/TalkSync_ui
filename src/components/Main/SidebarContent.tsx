@@ -5,6 +5,7 @@ import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
 import type { JSX } from "react";
 import { ArrowLeft } from "lucide-react";
+import SearchBar from "./SideBar/SearchBar";
 
 export default function SidebarContent({
   mode,
@@ -33,7 +34,10 @@ export default function SidebarContent({
     <div className="h-full flex flex-col gap-2 bg-white dark:bg-[#212121] z-10">
       <div className="p-4 font-semibold text-lg">
         {mode === "chats" ? (
-          <DropDownMenu setMode={setMode} />
+          <div className="flex items-center gap-2">
+            <DropDownMenu setMode={setMode} />
+            <SearchBar />
+          </div>
         ) : (
           <div className="flex gap-4 items-center">
             <ArrowLeft

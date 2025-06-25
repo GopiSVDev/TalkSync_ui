@@ -47,7 +47,7 @@ export function DropDownMenu({
           className="cursor-pointer bg-white hover:bg-[rgba(244,244,245)] dark:bg-[#212121] dark:hover:bg-[rgba(44,44,44)] rounded-4xl p-0"
           variant="secondary"
         >
-          <AlignJustify className="!h-5 !w-5" />
+          <AlignJustify className="!h-7 !w-7" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
