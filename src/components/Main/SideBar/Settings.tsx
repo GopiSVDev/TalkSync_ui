@@ -1,4 +1,8 @@
-import { updateProfile, type UpdateProfilePayload } from "@/api/userApi";
+import {
+  deleteProfile,
+  updateProfile,
+  type UpdateProfilePayload,
+} from "@/api/userApi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +26,7 @@ const Settings = ({
     React.SetStateAction<"chats" | "settings" | "profile">
   >;
 }) => {
-  const { user, setUser } = useAuth();
+  const { user, setUser, logout } = useAuth();
 
   const [displayName, setDisplayName] = useState(user?.displayName);
   const [password, setPassword] = useState("");
@@ -84,8 +88,16 @@ const Settings = ({
     }
   };
 
-  const handleDeleteAccount = () =>
-    toast("Account deletion not yet implemented.");
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteProfile(user.id);
+      logout();
+
+      toast.success("Account Deleted");
+    } catch (error) {
+      if (error instanceof Error) toast.error("Failed To Delete Profile");
+    }
+  };
 
   return (
     <Card className="text-foreground w-full max-w-md mx-auto rounded-2xl shadow-md dark:bg-[#1e1e1e] bg-white overflow-hidden">

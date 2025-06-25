@@ -53,3 +53,7 @@ export const updateProfile = async (data: UpdateProfilePayload) => {
   const response = await axios.post("/user/update", data);
   return response.data;
 };
+
+export const deleteProfile = async (id: string) => {
+  await axios.delete(`/user/delete/${id}`);
+};

@@ -108,7 +108,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="bg-[#212121]">
+    <Card className="bg-[#212121] py-5">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Login into your account</CardDescription>

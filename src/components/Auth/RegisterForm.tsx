@@ -131,7 +131,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="bg-[#212121]">
+    <Card className="bg-[#212121] py-5">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>Create a new account</CardDescription>
