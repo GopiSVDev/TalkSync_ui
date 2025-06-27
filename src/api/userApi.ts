@@ -57,3 +57,8 @@ export const updateProfile = async (data: UpdateProfilePayload) => {
 export const deleteProfile = async (id: string) => {
   await axios.delete(`/user/delete/${id}`);
 };
+
+export const searchUsers = async (keyword: string) => {
+  const response = await axios.get(`/user/search/${keyword}`);
+  return response.data;
+};

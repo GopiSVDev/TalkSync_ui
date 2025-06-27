@@ -1,12 +1,13 @@
 import { DropDownMenu } from "./SideBar/DropDownMenu";
 import ChatList from "./SideBar/ChatList/ChatList";
-import type { ChatPreview } from "@/types/chat";
+import type { ChatPreview, SearchList as SearchListType } from "@/types/chat";
 import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
 import { useEffect, useState, type JSX } from "react";
 import { ArrowLeft } from "lucide-react";
-import SearchBar from "./SideBar/SearchBar";
-import Search from "./SideBar/Search";
+import SearchBar from "./SideBar/Search/SearchBar";
+import { searchUsers } from "@/api/userApi";
+import SearchList from "./SideBar/Search/SearchList";
 
 export default function SidebarContent({
   mode,
@@ -24,9 +25,23 @@ export default function SidebarContent({
   selectedChat: ChatPreview | null;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchListType[]>([]);
 
   useEffect(() => {
-    console.log("Updated query:", searchQuery);
+    const fetch = async () => {
+      try {
+        const data = await searchUsers(searchQuery);
+        setSearchResults(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    if (searchQuery.trim()) {
+      fetch();
+    } else {
+      setSearchResults([]);
+    }
   }, [searchQuery]);
 
   const components: Record<string, JSX.Element> = {
@@ -35,7 +50,7 @@ export default function SidebarContent({
     ),
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
-    search: <Search />,
+    search: <SearchList chats={searchResults} onSelect={onSelect} />,
   };
 
   return (

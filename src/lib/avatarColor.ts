@@ -18,6 +18,10 @@ export const avatarColors = [
 ];
 
 export const getAvatarColor = (name: string) => {
+  if (!name || name.trim().length === 0) {
+    return "bg-blue-400";
+  }
+
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);

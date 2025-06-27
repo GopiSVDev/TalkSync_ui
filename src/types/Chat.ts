@@ -22,3 +22,12 @@ export interface ChatListProps {
   onSelect: (chat: ChatPreview) => void;
   selectedChat: ChatPreview | null;
 }
+
+export interface SearchList {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+  isOnline: string;
+  lastSeen: string;
+}
