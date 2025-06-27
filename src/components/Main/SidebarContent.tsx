@@ -1,6 +1,6 @@
 import { DropDownMenu } from "./SideBar/DropDownMenu";
 import ChatList from "./SideBar/ChatList/ChatList";
-import type { ChatPreview, SearchList as SearchListType } from "@/types/chat";
+import type { ChatListType } from "@/types/chat";
 import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
 import { useEffect, useState, type JSX } from "react";
@@ -20,12 +20,12 @@ export default function SidebarContent({
   setMode: React.Dispatch<
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
-  chats: ChatPreview[];
-  onSelect: (chat: ChatPreview) => void;
-  selectedChat: ChatPreview | null;
+  chats: ChatListType[];
+  onSelect: (chat: ChatListType) => void;
+  selectedChat: ChatListType | null;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchListType[]>([]);
+  const [searchResults, setSearchResults] = useState<ChatListType[]>([]);
 
   useEffect(() => {
     const fetch = async () => {

@@ -9,25 +9,21 @@ export interface Chat {
 }
 
 // frontend stuff
-export interface ChatPreview {
+export interface ChatListType {
   id: string;
-  name: string;
   avatarUrl: string;
-  lastMessage: string;
-  time: string;
+  displayName: string;
+  username: string;
+
+  lastMessage?: string;
+  time?: string;
+
+  isOnline?: string;
+  lastSeen?: string;
 }
 
 export interface ChatListProps {
-  chats: ChatPreview[];
-  onSelect: (chat: ChatPreview) => void;
-  selectedChat: ChatPreview | null;
-}
-
-export interface SearchList {
-  id: string;
-  username: string;
-  displayName: string;
-  avatarUrl: string;
-  isOnline: string;
-  lastSeen: string;
+  chats: ChatListType[];
+  onSelect: (chat: ChatListType) => void;
+  selectedChat: ChatListType | null;
 }

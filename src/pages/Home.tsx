@@ -5,27 +5,30 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { ChatPreview } from "@/types/chat";
+import type { ChatListType } from "@/types/chat";
 import { useState } from "react";
 
-const mockChats: ChatPreview[] = [
+const mockChats: ChatListType[] = [
   {
     id: "1",
-    name: "Alice",
+    displayName: "Alice",
+    username: "alice",
     lastMessage: "Hey, how are you?",
     avatarUrl: "",
     time: "10:24 AM",
   },
   {
     id: "2",
-    name: "Bob",
+    displayName: "Bob",
+    username: "bob",
     lastMessage: "Got the file, thanks!",
     avatarUrl: "",
     time: "9:15 AM",
   },
   {
     id: "3",
-    name: "Charlie",
+    displayName: "Charlie",
+    username: "charlie",
     lastMessage: "Let's catch up tomorrow.",
     avatarUrl: "",
     time: "Yesterday",
@@ -33,9 +36,9 @@ const mockChats: ChatPreview[] = [
 ];
 
 const Home = () => {
-  const [chats, setChats] = useState<ChatPreview[]>(mockChats);
+  const [chats, setChats] = useState<ChatListType[]>(mockChats);
 
-  const [selectedChat, setSelectedChat] = useState<ChatPreview | null>(null);
+  const [selectedChat, setSelectedChat] = useState<ChatListType | null>(null);
 
   const [sidebarMode, setSidebarMode] = useState<
     "chats" | "profile" | "settings" | "search"

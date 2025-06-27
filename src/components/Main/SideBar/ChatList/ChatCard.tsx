@@ -1,4 +1,4 @@
-import type { ChatPreview } from "@/types/chat";
+import type { ChatListType } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/lib/avatarColor";
@@ -8,9 +8,9 @@ const ChatCard = ({
   selectedChat,
   onSelect,
 }: {
-  chat: ChatPreview;
-  selectedChat: ChatPreview | null;
-  onSelect: (chat: ChatPreview) => void;
+  chat: ChatListType;
+  selectedChat: ChatListType | null;
+  onSelect: (chat: ChatListType) => void;
 }) => {
   const rippleRef = useRef<HTMLDivElement>(
     null
@@ -70,10 +70,10 @@ const ChatCard = ({
           {/* Avatar / Logo */}
           <div
             className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
-              chat.name
+              chat.displayName
             )}`}
           >
-            {chat.name[0]}
+            {chat.displayName[0]}
           </div>
 
           {/* Chat Info */}
@@ -84,7 +84,7 @@ const ChatCard = ({
                   selectedChat?.id == chat.id ? "text-white" : ""
                 }`}
               >
-                {chat.name}
+                {chat.displayName}
               </p>
               <p
                 className={`text-[12px] font-light ${

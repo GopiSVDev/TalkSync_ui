@@ -1,4 +1,4 @@
-import type { ChatPreview } from "@/types/chat";
+import type { ChatListType } from "@/types/chat";
 import ChatWindowHeader from "./ChatWindow/ChatWindowHeader";
 import MessagesWindow from "./ChatWindow/MessagesWindow";
 import ChatInputWithButton from "./ChatWindow/ChatInputWithButton";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import type { Message } from "@/types/message";
 
 export interface ChatWindowProps {
-  chat: ChatPreview | null;
+  chat: ChatListType | null;
   onBack: () => void;
 }
 

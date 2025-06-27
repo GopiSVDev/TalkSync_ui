@@ -1,4 +1,4 @@
-import type { SearchList } from "@/types/chat";
+import type { ChatListType } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { getAvatarColor } from "@/lib/avatarColor";
 
@@ -6,8 +6,8 @@ const SearchCard = ({
   chat,
   onSelect,
 }: {
-  chat: SearchList;
-  onSelect: (chat: SearchList) => void;
+  chat: ChatListType;
+  onSelect: (chat: ChatListType) => void;
 }) => {
   if (!chat) return;
 

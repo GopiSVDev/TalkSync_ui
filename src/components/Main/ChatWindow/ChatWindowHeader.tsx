@@ -14,13 +14,13 @@ const ChatWindowHeader = ({ chat, onBack }: ChatWindowProps) => {
       />
       <div
         className={`w-[40px] h-[40px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
-          chat.name
+          chat.displayName
         )}`}
       >
-        {chat.name[0]}
+        {chat.displayName[0]}
       </div>
       <div className="flex flex-col">
-        <div className="text-[16px] font-semibold">{chat.name}</div>
+        <div className="text-[16px] font-semibold">{chat.displayName}</div>
         <div className="text-sm font-normal text-muted-foreground">
           last seen recently
         </div>
