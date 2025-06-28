@@ -10,94 +10,101 @@ export interface ChatWindowProps {
   onBack: () => void;
 }
 
-// const messages = [
-//   // 🗓️ June 15, 2025
-//   {
-//     id: 1,
-//     senderId: "user_1",
-//     text: "Hey there!",
-//     createdAt: "2025-06-15T09:02:00Z",
-//   },
-//   {
-//     id: 2,
-//     senderId: "user_2",
-//     text: "Hi! How’s your weekend?",
-//     createdAt: "2025-06-15T09:03:10Z",
-//   },
-
-//   // 🗓️ June 16, 2025
-//   {
-//     id: 3,
-//     senderId: "user_1",
-//     text: "Pretty good. You?",
-//     createdAt: "2025-06-16T14:12:00Z",
-//   },
-//   {
-//     id: 4,
-//     senderId: "user_2",
-//     text: "Just got back from a trip.",
-//     createdAt: "2025-06-16T14:13:22Z",
-//   },
-//   {
-//     id: 5,
-//     senderId: "user_2",
-//     text: "Lots to catch up on.",
-//     createdAt: "2025-06-16T14:14:01Z",
-//   },
-
-//   // 🗓️ June 17, 2025
-//   {
-//     id: 6,
-//     senderId: "user_1",
-//     text: "Want to call later?",
-//     createdAt: "2025-06-17T18:45:00Z",
-//   },
-//   {
-//     id: 7,
-//     senderId: "user_2",
-//     text: "Sure, around 8?",
-//     createdAt: "2025-06-17T18:47:00Z",
-//   },
-
-//   // 🗓️ June 18, 2025
-//   {
-//     id: 8,
-//     senderId: "user_1",
-//     text: "Thanks for the talk last night.",
-//     createdAt: "2025-06-18T08:30:00Z",
-//   },
-//   {
-//     id: 9,
-//     senderId: "user_2",
-//     text: "It really helped me.",
-//     createdAt: "2025-06-18T08:31:30Z",
-//   },
-//   {
-//     id: 10,
-//     senderId: "user_1",
-//     text: "Glad to hear ❤️",
-//     createdAt: "2025-06-18T08:33:00Z",
-//   },
-// ];
+const dummyMessages: Message[] = [
+  {
+    id: "msg1",
+    chatId: "chat123",
+    senderId: "userA",
+    content: "Hey, how's it going?",
+    createdAt: "2025-06-28T10:15:00Z",
+    seenBy: [{ userId: "userB", seenAt: "2025-06-28T10:17:00Z" }],
+  },
+  {
+    id: "msg2",
+    chatId: "chat123",
+    senderId: "userB",
+    content: "All good! Just working on the project.",
+    createdAt: "2025-06-28T10:16:00Z",
+    seenBy: [{ userId: "userA", seenAt: "2025-06-28T10:18:00Z" }],
+  },
+  {
+    id: "msg3",
+    chatId: "chat123",
+    senderId: "userA",
+    mediaUrl: "https://images.unsplash.com/photo-1750173588085-895136c6e0a5",
+    mediaType: "image",
+    createdAt: "2025-06-28T10:17:00Z",
+    seenBy: [{ userId: "userB", seenAt: "2025-06-28T10:19:00Z" }],
+  },
+  {
+    id: "msg4",
+    chatId: "chat123",
+    senderId: "userB",
+    content: "Looks awesome 🔥",
+    createdAt: "2025-06-28T10:18:00Z",
+    seenBy: [],
+  },
+  {
+    id: "msg5",
+    chatId: "chat123",
+    senderId: "userA",
+    content: "Check out this audio clip.",
+    mediaUrl: "https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.mp3",
+    mediaType: "audio",
+    createdAt: "2025-06-28T10:19:00Z",
+    seenBy: [],
+  },
+  {
+    id: "msg6",
+    chatId: "chat123",
+    senderId: "userB",
+    mediaUrl:
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    mediaType: "video",
+    createdAt: "2025-06-28T10:20:00Z",
+    seenBy: [],
+  },
+  {
+    id: "msg7",
+    chatId: "chat123",
+    senderId: "userA",
+    content: "Can you review the doc?",
+    mediaUrl:
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    mediaType: "file",
+    createdAt: "2025-06-28T10:21:00Z",
+    seenBy: [{ userId: "userB", seenAt: "2025-06-28T10:23:00Z" }],
+  },
+  {
+    id: "msg8",
+    chatId: "chat123",
+    senderId: "userB",
+    content: "Yes, I’ll check it today.",
+    createdAt: "2025-06-28T10:22:00Z",
+    seenBy: [{ userId: "userA", seenAt: "2025-06-28T10:24:00Z" }],
+  },
+  {
+    id: "msg9",
+    chatId: "chat123",
+    senderId: "userA",
+    content: "Thanks!",
+    createdAt: "2025-06-28T10:23:00Z",
+    seenBy: [],
+  },
+  {
+    id: "msg10",
+    chatId: "chat123",
+    senderId: "userB",
+    content: "No problem 🙌",
+    createdAt: "2025-06-28T10:24:00Z",
+    seenBy: [],
+  },
+];
 
 const currentUserId = "user_1";
 
 export default function ChatWindow({ chat }: { chat: ChatListType | null }) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      chatId: "1",
-      senderId: "user_2",
-      content: "Hey!",
-      createdAt: new Date().toISOString(),
-      seenBy: [
-        {
-          userId: "user1",
-          seenAt: new Date().toISOString(),
-        },
-      ],
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(dummyMessages);
 
   useEffect(() => {
     if (

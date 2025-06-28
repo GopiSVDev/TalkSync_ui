@@ -55,7 +55,6 @@ const Home = () => {
             maxSize={30}
             className="border-r bg-white dark:bg-[#212121] z-10"
           >
-            {/* Side bar contents */}
             <SidebarContent
               mode={sidebarMode}
               setMode={setSidebarMode}

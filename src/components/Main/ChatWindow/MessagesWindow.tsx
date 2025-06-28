@@ -1,7 +1,12 @@
 import type { Message } from "@/types/message";
 import { groupMessagesByDate } from "@/utils/utility";
-import { format } from "date-fns";
 import { useEffect, useRef } from "react";
+import AudioMessage from "./Messages/AudioMessage";
+import FileMessage from "./Messages/FileMessage";
+import TextMessage from "./Messages/TextMessage";
+import TimeStampForMedia from "./Messages/TimeStampForMedia";
+import ImageMessage from "./Messages/ImageMessage";
+import VideoMessage from "./Messages/VideoMessage";
 
 const MessagesWindow = ({ messages }: { messages: Message[] }) => {
   const chatContainerRef = useRef(null);
@@ -17,7 +22,7 @@ const MessagesWindow = ({ messages }: { messages: Message[] }) => {
   );
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
-  const currentUserId = "user_1";
+  const currentUserId = "userA";
 
   return (
     <div
@@ -35,6 +40,10 @@ const MessagesWindow = ({ messages }: { messages: Message[] }) => {
             {messages.map((msg: Message) => {
               const isSender = msg.senderId === currentUserId;
 
+              const isSeen = msg.seenBy.some(
+                (seen) => seen.userId !== currentUserId
+              );
+
               return (
                 <div
                   key={msg.id}
@@ -42,21 +51,50 @@ const MessagesWindow = ({ messages }: { messages: Message[] }) => {
                     isSender ? "justify-end" : "justify-start"
                   } mb-2`}
                 >
-                  <div
-                    className={`inline-block max-w-xs px-4 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap ${
-                      isSender
-                        ? "bg-[#EEFFDE] dark:bg-[#8373d3] text-black dark:text-white rounded-br-none"
-                        : "bg-gray-100 dark:bg-[#212121] text-gray-800 dark:text-white rounded-bl-none"
-                    }`}
-                  >
-                    <div className="relative space-x-2">
-                      <span className="block break-words pr-12 text-[16px]">
-                        {msg.content}
-                      </span>
-                      <span className="absolute bottom-0 right-0 text-xs text-gray-400">
-                        {format(new Date(msg.createdAt), "h:mm a")}
-                      </span>
-                    </div>
+                  <div className="max-w-xs space-y-2">
+                    {msg.mediaType && (
+                      <div
+                        className={`rounded-xl overflow-hidden ${
+                          msg.mediaType === "image" || msg.mediaType === "video"
+                            ? "max-w-[250px]"
+                            : "bg-gray-100 dark:bg-[#2c2c2c] p-2"
+                        }`}
+                      >
+                        {msg.mediaType === "image" && msg.mediaUrl && (
+                          <ImageMessage mediaUrl={msg.mediaUrl} />
+                        )}
+
+                        {msg.mediaType === "video" && msg.mediaUrl && (
+                          <VideoMessage src={msg.mediaUrl} />
+                        )}
+
+                        {msg.mediaType === "audio" && msg.mediaUrl && (
+                          <AudioMessage src={msg.mediaUrl} />
+                        )}
+
+                        {msg.mediaType === "file" && msg.mediaUrl && (
+                          <FileMessage src={msg.mediaUrl} />
+                        )}
+                      </div>
+                    )}
+
+                    {/* Text */}
+                    {msg.content && (
+                      <TextMessage
+                        msg={msg}
+                        isSeen={isSeen}
+                        isSender={isSender}
+                      />
+                    )}
+
+                    {/* Timestamp for media */}
+                    {!msg.content && (
+                      <TimeStampForMedia
+                        createdAt={msg.createdAt}
+                        isSender={isSender}
+                        isSeen={isSeen}
+                      />
+                    )}
                   </div>
                 </div>
               );
