@@ -3,16 +3,25 @@ import SearchCard from "./SearchCard";
 
 const SearchList = ({
   chats,
-  onSelect,
+  setSelectedChat,
 }: {
   chats: ChatListType[];
-  onSelect: (chat: ChatListType) => void;
+  setSelectedChat: (chat: ChatListType) => void;
 }) => {
   return (
-    <>
+    <div>
+      {chats.length > 0 && (
+        <h2 className="px-4 py-1 md:px-6 font-bold text-[#707579] dark:text-[#AAAAAA]">
+          Global Search
+        </h2>
+      )}
       {chats.length > 0 ? (
         chats.map((chat) => (
-          <SearchCard key={chat.id} chat={chat} onSelect={onSelect} />
+          <SearchCard
+            key={chat.id}
+            chat={chat}
+            setSelectedChat={setSelectedChat}
+          />
         ))
       ) : (
         <div className="w-full h-full flex flex-col items-center px-4 pt-10">
@@ -22,7 +31,7 @@ const SearchList = ({
           </h3>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

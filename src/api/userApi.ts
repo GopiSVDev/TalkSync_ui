@@ -62,3 +62,8 @@ export const searchUsers = async (keyword: string) => {
   const response = await axios.get(`/user/search/${keyword}`);
   return response.data;
 };
+
+export const getUser = async (id: string) => {
+  const response = await axios.get(`/user/${id}`);
+  return response.data;
+};

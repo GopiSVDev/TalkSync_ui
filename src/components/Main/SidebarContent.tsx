@@ -8,24 +8,22 @@ import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/Search/SearchBar";
 import { searchUsers } from "@/api/userApi";
 import SearchList from "./SideBar/Search/SearchList";
+import { useChatStore } from "@/store/chatStore";
 
 export default function SidebarContent({
   mode,
   setMode,
   chats,
-  onSelect,
-  selectedChat,
 }: {
   mode: string;
   setMode: React.Dispatch<
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
   chats: ChatListType[];
-  onSelect: (chat: ChatListType) => void;
-  selectedChat: ChatListType | null;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<ChatListType[]>([]);
+  const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
   useEffect(() => {
     const fetch = async () => {
@@ -45,12 +43,10 @@ export default function SidebarContent({
   }, [searchQuery]);
 
   const components: Record<string, JSX.Element> = {
-    chats: (
-      <ChatList chats={chats} onSelect={onSelect} selectedChat={selectedChat} />
-    ),
+    chats: <ChatList chats={chats} />,
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
-    search: <SearchList chats={searchResults} onSelect={onSelect} />,
+    search: <SearchList chats={searchResults} setSelectedChat={setSelectedChat} />,
   };
 
   return (

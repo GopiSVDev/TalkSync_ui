@@ -82,7 +82,7 @@ export interface ChatWindowProps {
 
 const currentUserId = "user_1";
 
-export default function ChatWindow({ chat, onBack }: ChatWindowProps) {
+export default function ChatWindow({ chat }: { chat: ChatListType | null }) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -132,7 +132,7 @@ export default function ChatWindow({ chat, onBack }: ChatWindowProps) {
   return (
     <div className="h-screen flex flex-col items-center z-10">
       {/* Header with status */}
-      <ChatWindowHeader chat={chat} onBack={onBack} />
+      <ChatWindowHeader chat={chat} />
 
       {/* message window */}
       <MessagesWindow messages={messages} />

@@ -2,16 +2,12 @@ import type { ChatListType } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/lib/avatarColor";
+import { useChatStore } from "@/store/chatStore";
 
-const ChatCard = ({
-  chat,
-  selectedChat,
-  onSelect,
-}: {
-  chat: ChatListType;
-  selectedChat: ChatListType | null;
-  onSelect: (chat: ChatListType) => void;
-}) => {
+const ChatCard = ({ chat }: { chat: ChatListType }) => {
+  const selectedChat = useChatStore((state) => state.selectedChat);
+  const setSelectedChat = useChatStore((state) => state.setSelectedChat);
+
   const rippleRef = useRef<HTMLDivElement>(
     null
   ) as React.RefObject<HTMLDivElement>;
@@ -57,23 +53,27 @@ const ChatCard = ({
           ? "bg-[#3390ec] dark:bg-[#766ac8]"
           : "hover:bg-[rgb(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
       }`}
-      onClick={() => onSelect(chat)}
+      onClick={() => setSelectedChat(chat)}
     >
       <div
         ref={rippleRef}
         onClick={(e) => {
           handleRipple(e, rippleRef);
-          onSelect(chat);
+          setSelectedChat(chat);
         }}
       >
         <div className="flex items-center gap-4 h-full">
           {/* Avatar / Logo */}
           <div
-            className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
+            className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white overflow-hidden ${getAvatarColor(
               chat.displayName
             )}`}
           >
-            {chat.displayName[0]}
+            {chat.avatarUrl ? (
+              <img src={chat.avatarUrl} />
+            ) : (
+              chat.displayName[0]
+            )}
           </div>
 
           {/* Chat Info */}

@@ -4,10 +4,10 @@ import { getAvatarColor } from "@/lib/avatarColor";
 
 const SearchCard = ({
   chat,
-  onSelect,
+  setSelectedChat,
 }: {
   chat: ChatListType;
-  onSelect: (chat: ChatListType) => void;
+  setSelectedChat: (chat: ChatListType) => void;
 }) => {
   if (!chat) return;
 
@@ -15,9 +15,9 @@ const SearchCard = ({
     <Card
       key={chat.id}
       className={`relative overflow-hidden px-4 py-2 cursor-pointer border-none h-[84px] bg-white dark:bg-[#212121] hover:bg-[rgb(244,244,245)] dark:hover:bg-[rgba(44,44,44)]`}
-      onClick={() => onSelect(chat)}
+      onClick={() => setSelectedChat(chat)}
     >
-      <div onClick={() => onSelect(chat)}>
+      <div onClick={() => setSelectedChat(chat)}>
         <div className="flex items-center gap-4 h-full">
           {/* Avatar / Logo */}
           <div

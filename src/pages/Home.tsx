@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/resizable";
 import type { ChatListType } from "@/types/chat";
 import { useState } from "react";
+import { useChatStore } from "@/store/chatStore";
 
 const mockChats: ChatListType[] = [
   {
@@ -14,7 +15,8 @@ const mockChats: ChatListType[] = [
     displayName: "Alice",
     username: "alice",
     lastMessage: "Hey, how are you?",
-    avatarUrl: "",
+    avatarUrl:
+      "https://cdn.pixabay.com/photo/2021/02/25/19/20/wojak-6049880_1280.png",
     time: "10:24 AM",
   },
   {
@@ -37,8 +39,7 @@ const mockChats: ChatListType[] = [
 
 const Home = () => {
   const [chats, setChats] = useState<ChatListType[]>(mockChats);
-
-  const [selectedChat, setSelectedChat] = useState<ChatListType | null>(null);
+  const selectedChat = useChatStore((state) => state.selectedChat);
 
   const [sidebarMode, setSidebarMode] = useState<
     "chats" | "profile" | "settings" | "search"
@@ -49,7 +50,7 @@ const Home = () => {
       <div className="h-screen w-full hidden md:flex flex-row overflow-hidden chat-bg">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
-            defaultSize={30}
+            defaultSize={25}
             minSize={20}
             maxSize={30}
             className="border-r bg-white dark:bg-[#212121] z-10"
@@ -59,8 +60,6 @@ const Home = () => {
               mode={sidebarMode}
               setMode={setSidebarMode}
               chats={chats}
-              onSelect={setSelectedChat}
-              selectedChat={selectedChat}
             />
           </ResizablePanel>
 
@@ -72,10 +71,7 @@ const Home = () => {
                 !selectedChat ? "hidden md:flex" : "flex"
               } flex-col`}
             >
-              <ChatWindow
-                chat={selectedChat}
-                onBack={() => setSelectedChat(null)}
-              />
+              <ChatWindow chat={selectedChat} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -86,14 +82,9 @@ const Home = () => {
             mode={sidebarMode}
             setMode={setSidebarMode}
             chats={chats}
-            onSelect={setSelectedChat}
-            selectedChat={selectedChat}
           />
         ) : (
-          <ChatWindow
-            chat={selectedChat}
-            onBack={() => setSelectedChat(null)}
-          />
+          <ChatWindow chat={selectedChat} />
         )}
       </div>
     </>

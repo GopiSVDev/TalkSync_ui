@@ -24,6 +24,6 @@ export interface ChatListType {
 
 export interface ChatListProps {
   chats: ChatListType[];
-  onSelect: (chat: ChatListType) => void;
-  selectedChat: ChatListType | null;
+  onSelect: (chat: string) => void;
+  selectedChat: string | null;
 }
