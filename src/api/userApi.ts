@@ -1,3 +1,4 @@
+import type { ChatUser } from "@/types/chat";
 import axios from "./axiosInstance";
 
 interface RegisterPayload {
@@ -11,18 +12,9 @@ interface LoginPayload {
   password: string;
 }
 
-export interface UserResponse {
-  id: string;
-  username: string;
-  displayName: string;
-  avatarUrl: string;
-  isOnline: boolean;
-  lastSeen: string;
-}
-
 interface LoginResponse {
   token: string;
-  user: UserResponse;
+  user: ChatUser;
 }
 
 export interface UpdateProfilePayload {

@@ -12,10 +12,10 @@ import { toast } from "sonner";
 import { register } from "@/api/userApi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const RegisterForm = () => {
-  const { setToken, setUser } = useAuth();
+  const { setToken, setUser } = useAuthStore();
 
   const [formValues, setFormValues] = useState({
     username: "",
@@ -99,9 +99,6 @@ const RegisterForm = () => {
         displayName: formValues.displayName,
         password: formValues.password,
       });
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
 
       setToken(token);
       setUser(user);

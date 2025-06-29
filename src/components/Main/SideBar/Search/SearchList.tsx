@@ -1,12 +1,12 @@
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import SearchCard from "./SearchCard";
 
 const SearchList = ({
   chats,
   setSelectedChat,
 }: {
-  chats: ChatListType[];
-  setSelectedChat: (chat: ChatListType) => void;
+  chats: ChatUser[];
+  setSelectedChat: (chat: ChatUser) => void;
 }) => {
   return (
     <div>

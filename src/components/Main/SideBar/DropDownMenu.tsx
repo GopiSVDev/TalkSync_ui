@@ -8,8 +8,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
-import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/use-theme";
+import { useAuthStore } from "@/store/useAuthStore";
 import {
   AlignJustify,
   LogOut,
@@ -25,7 +25,7 @@ export function DropDownMenu({
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
 }) {
-  const { logout } = useAuth();
+  const { logout } = useAuthStore();
   const { theme, setTheme } = useTheme();
   const items = [
     {

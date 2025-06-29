@@ -5,11 +5,11 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import { useState } from "react";
-import { useChatStore } from "@/store/chatStore";
+import { useChatStore } from "@/store/useChatStore";
 
-const mockChats: ChatListType[] = [
+const mockChats: ChatUser[] = [
   {
     id: "1",
     displayName: "Alice",
@@ -38,7 +38,7 @@ const mockChats: ChatListType[] = [
 ];
 
 const Home = () => {
-  const [chats, setChats] = useState<ChatListType[]>(mockChats);
+  const [chats, setChats] = useState<ChatUser[]>(mockChats);
   const selectedChat = useChatStore((state) => state.selectedChat);
 
   const [sidebarMode, setSidebarMode] = useState<

@@ -1,14 +1,15 @@
 import AuthTabs from "@/components/Auth/AuthTabs";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Loader } from "lucide-react";
 import { useEffect } from "react";
 
 const AuthPage = () => {
   useEffect(() => {
+    localStorage.setItem("vite-ui-theme", "dark");
     document.documentElement.classList.add("dark");
   }, []);
 
-  const { isLoading } = useAuth();
+  const { isLoading } = useAuthStore();
 
   return (
     <div className="w-full flex flex-col justify-center items-center min-h-screen bg-[#212121] gap-5">

@@ -1,4 +1,4 @@
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import ChatWindowHeader from "./ChatWindow/ChatWindowHeader";
 import MessagesWindow from "./ChatWindow/MessagesWindow";
 import ChatInputWithButton from "./ChatWindow/ChatInputWithButton";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import type { Message } from "@/types/message";
 
 export interface ChatWindowProps {
-  chat: ChatListType | null;
+  chat: ChatUser | null;
   onBack: () => void;
 }
 
@@ -103,7 +103,7 @@ const dummyMessages: Message[] = [
 
 const currentUserId = "user_1";
 
-export default function ChatWindow({ chat }: { chat: ChatListType | null }) {
+export default function ChatWindow({ chat }: { chat: ChatUser | null }) {
   const [messages, setMessages] = useState<Message[]>(dummyMessages);
 
   useEffect(() => {

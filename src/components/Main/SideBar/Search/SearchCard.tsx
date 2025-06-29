@@ -1,4 +1,4 @@
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { getAvatarColor } from "@/lib/avatarColor";
 
@@ -6,8 +6,8 @@ const SearchCard = ({
   chat,
   setSelectedChat,
 }: {
-  chat: ChatListType;
-  setSelectedChat: (chat: ChatListType) => void;
+  chat: ChatUser;
+  setSelectedChat: (chat: ChatUser) => void;
 }) => {
   if (!chat) return;
 

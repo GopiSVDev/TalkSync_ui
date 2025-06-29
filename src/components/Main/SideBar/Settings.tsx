@@ -6,7 +6,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -26,7 +26,7 @@ const Settings = ({
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
 }) => {
-  const { user, setUser, logout } = useAuth();
+  const { user, setUser, logout } = useAuthStore();
 
   const [displayName, setDisplayName] = useState(user?.displayName);
   const [password, setPassword] = useState("");

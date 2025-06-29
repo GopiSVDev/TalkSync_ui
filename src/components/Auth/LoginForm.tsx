@@ -10,11 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { login, guest } from "@/api/userApi";
 import { toast } from "sonner";
-import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const LoginForm = () => {
-  const { setToken, setUser } = useAuth();
+  const { setToken, setUser } = useAuthStore();
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -65,9 +65,8 @@ const LoginForm = () => {
         password: formValues.password,
       });
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
       setToken(token);
+      setUser(user);
 
       toast.success("Login Successful");
 
@@ -90,9 +89,6 @@ const LoginForm = () => {
 
     try {
       const { token, user } = await guest();
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
 
       setToken(token);
       setUser(user);

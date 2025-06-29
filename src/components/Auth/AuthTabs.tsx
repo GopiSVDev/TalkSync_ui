@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 function AuthTabs() {
   useEffect(() => {
+    localStorage.setItem("vite-ui-theme", "dark");
     document.documentElement.classList.add("dark");
   }, []);
 

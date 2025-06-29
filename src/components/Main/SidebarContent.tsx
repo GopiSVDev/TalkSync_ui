@@ -1,6 +1,6 @@
 import { DropDownMenu } from "./SideBar/DropDownMenu";
 import ChatList from "./SideBar/ChatList/ChatList";
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
 import { useEffect, useState, type JSX } from "react";
@@ -8,7 +8,7 @@ import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/Search/SearchBar";
 import { searchUsers } from "@/api/userApi";
 import SearchList from "./SideBar/Search/SearchList";
-import { useChatStore } from "@/store/chatStore";
+import { useChatStore } from "@/store/useChatStore";
 
 export default function SidebarContent({
   mode,
@@ -19,10 +19,10 @@ export default function SidebarContent({
   setMode: React.Dispatch<
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
-  chats: ChatListType[];
+  chats: ChatUser[];
 }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<ChatListType[]>([]);
+  const [searchResults, setSearchResults] = useState<ChatUser[]>([]);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
   useEffect(() => {
@@ -46,7 +46,9 @@ export default function SidebarContent({
     chats: <ChatList chats={chats} />,
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
-    search: <SearchList chats={searchResults} setSelectedChat={setSelectedChat} />,
+    search: (
+      <SearchList chats={searchResults} setSelectedChat={setSelectedChat} />
+    ),
   };
 
   return (

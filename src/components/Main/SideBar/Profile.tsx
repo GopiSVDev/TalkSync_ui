@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { AtSign, CircleDot, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ const Profile = ({
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
 }) => {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || "");
   const [displayName, setDisplayName] = useState(user?.displayName || "");

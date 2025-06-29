@@ -1,10 +1,10 @@
-import { useAuth } from "@/context/AuthContext";
 import { Route, Routes } from "react-router-dom";
 import Home from "@/pages/Home";
 import AuthPage from "@/pages/AuthPage";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <Routes>

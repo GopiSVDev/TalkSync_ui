@@ -1,9 +1,9 @@
 import { ArrowLeft } from "lucide-react";
 import { getAvatarColor } from "@/lib/avatarColor";
-import { useChatStore } from "@/store/chatStore";
-import type { ChatListType } from "@/types/chat";
+import { useChatStore } from "@/store/useChatStore";
+import type { ChatUser } from "@/types/chat";
 
-const ChatWindowHeader = ({ chat }: { chat: ChatListType }) => {
+const ChatWindowHeader = ({ chat }: { chat: ChatUser }) => {
   const setSelectedChat = useChatStore((store) => store.setSelectedChat);
   if (!chat) return;
 

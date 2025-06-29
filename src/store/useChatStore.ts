@@ -1,9 +1,9 @@
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import { create } from "zustand";
 
 type ChatStore = {
-  selectedChat: ChatListType | null;
-  setSelectedChat: (chat: ChatListType | null) => void;
+  selectedChat: ChatUser | null;
+  setSelectedChat: (chat: ChatUser | null) => void;
 };
 
 export const useChatStore = create<ChatStore>((set) => ({

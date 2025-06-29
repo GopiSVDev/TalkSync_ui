@@ -1,7 +1,7 @@
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import ChatCard from "./ChatCard";
 
-const ChatList = ({ chats }: { chats: ChatListType[] }) => {
+const ChatList = ({ chats }: { chats: ChatUser[] }) => {
   return (
     <>
       {chats.length > 0 ? (

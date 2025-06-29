@@ -9,7 +9,7 @@ export interface Chat {
 }
 
 // frontend stuff
-export interface ChatListType {
+export interface ChatUser {
   id: string;
   avatarUrl: string;
   displayName: string;
@@ -23,7 +23,7 @@ export interface ChatListType {
 }
 
 export interface ChatListProps {
-  chats: ChatListType[];
+  chats: ChatUser[];
   onSelect: (chat: string) => void;
   selectedChat: string | null;
 }

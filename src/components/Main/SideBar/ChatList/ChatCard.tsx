@@ -1,10 +1,10 @@
-import type { ChatListType } from "@/types/chat";
+import type { ChatUser } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/lib/avatarColor";
-import { useChatStore } from "@/store/chatStore";
+import { useChatStore } from "@/store/useChatStore";
 
-const ChatCard = ({ chat }: { chat: ChatListType }) => {
+const ChatCard = ({ chat }: { chat: ChatUser }) => {
   const selectedChat = useChatStore((state) => state.selectedChat);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
@@ -78,16 +78,14 @@ const ChatCard = ({ chat }: { chat: ChatListType }) => {
 
           {/* Chat Info */}
           <div className="flex flex-col flex-1 min-w-0">
-            <div className="text-[16px] font-semibold text-foreground truncate flex justify-between items-center">
+            <div className="text-[16px] font-semibold text-foreground truncate flex justify-between items-center gap-3">
               <p
-                className={`truncate ${
-                  selectedChat?.id == chat.id ? "text-white" : ""
-                }`}
+                className={`${selectedChat?.id == chat.id ? "text-white" : ""}`}
               >
                 {chat.displayName}
               </p>
               <p
-                className={`text-[12px] font-light ${
+                className={`truncate text-[12px] font-light ${
                   selectedChat?.id == chat.id ? "text-white" : ""
                 }`}
               >
