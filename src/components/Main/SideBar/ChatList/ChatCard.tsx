@@ -1,7 +1,7 @@
 import type { ChatUser } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { useRef } from "react";
-import { getAvatarColor } from "@/lib/avatarColor";
+import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
 
 const ChatCard = ({ chat }: { chat: ChatUser }) => {

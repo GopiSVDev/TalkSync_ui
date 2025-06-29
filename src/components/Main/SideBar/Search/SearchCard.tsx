@@ -1,6 +1,6 @@
 import type { ChatUser } from "@/types/chat";
 import { Card } from "../../../ui/card";
-import { getAvatarColor } from "@/lib/avatarColor";
+import { getAvatarColor } from "@/utils/avatarColor";
 
 const SearchCard = ({
   chat,

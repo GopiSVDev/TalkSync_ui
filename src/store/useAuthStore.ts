@@ -1,13 +1,9 @@
 import type { ChatUser } from "@/types/chat";
+import { isTokenExpired } from "@/utils/jwt";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-interface JwtPayload {
-  exp?: number;
-}
 
 interface AuthState {
   token: string | null;
@@ -42,6 +38,7 @@ export const useAuthStore = create<AuthState>()(
 
       logout: (silent = false) => {
         set({ token: null, user: null, isAuthenticated: false });
+        localStorage.removeItem("auth-store");
         delete axios.defaults.headers.common["Authorization"];
 
         if (!silent) {
@@ -52,20 +49,12 @@ export const useAuthStore = create<AuthState>()(
 
       validateToken: () => {
         const token = get().token;
-        if (!token) return false;
-
-        try {
-          const decoded = jwtDecode<JwtPayload>(token);
-          if (!decoded.exp || Date.now() >= decoded.exp * 1000) {
-            get().logout(true);
-            return false;
-          }
-
-          return true;
-        } catch {
+        if (!token || isTokenExpired(token)) {
           get().logout(true);
           return false;
         }
+
+        return true;
       },
     }),
     {
