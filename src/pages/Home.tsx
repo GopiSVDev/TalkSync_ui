@@ -9,36 +9,36 @@ import type { ChatUser } from "@/types/chat";
 import { useState } from "react";
 import { useChatStore } from "@/store/useChatStore";
 
-const mockChats: ChatUser[] = [
-  {
-    id: "1",
-    displayName: "Alice",
-    username: "alice",
-    lastMessage: "Hey, how are you?",
-    avatarUrl:
-      "https://cdn.pixabay.com/photo/2021/02/25/19/20/wojak-6049880_1280.png",
-    time: "10:24 AM",
-  },
-  {
-    id: "2",
-    displayName: "Bob",
-    username: "bob",
-    lastMessage: "Got the file, thanks!",
-    avatarUrl: "",
-    time: "9:15 AM",
-  },
-  {
-    id: "3",
-    displayName: "Charlie",
-    username: "charlie",
-    lastMessage: "Let's catch up tomorrow.",
-    avatarUrl: "",
-    time: "Yesterday",
-  },
-];
+// const mockChats: ChatUser[] = [
+//   {
+//     id: "1",
+//     displayName: "Alice",
+//     username: "alice",
+//     lastMessage: "Hey, how are you?",
+//     avatarUrl:
+//       "https://cdn.pixabay.com/photo/2021/02/25/19/20/wojak-6049880_1280.png",
+//     time: "10:24 AM",
+//   },
+//   {
+//     id: "2",
+//     displayName: "Bob",
+//     username: "bob",
+//     lastMessage: "Got the file, thanks!",
+//     avatarUrl: "",
+//     time: "9:15 AM",
+//   },
+//   {
+//     id: "3",
+//     displayName: "Charlie",
+//     username: "charlie",
+//     lastMessage: "Let's catch up tomorrow.",
+//     avatarUrl: "",
+//     time: "Yesterday",
+//   },
+// ];
 
 const Home = () => {
-  const [chats, setChats] = useState<ChatUser[]>(mockChats);
+  const [chats, setChats] = useState<ChatUser[]>([]);
   const selectedChat = useChatStore((state) => state.selectedChat);
 
   const [sidebarMode, setSidebarMode] = useState<

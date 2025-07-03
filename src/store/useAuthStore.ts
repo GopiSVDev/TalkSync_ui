@@ -13,6 +13,7 @@ interface AuthState {
 
   setToken: (token: string | null) => void;
   setUser: (user: ChatUser | null) => void;
+  updateUser: (partial: Partial<ChatUser>) => void;
   logout: (silent?: boolean) => void;
   validateToken: () => boolean;
 }
@@ -35,6 +36,15 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setUser: (user) => set({ user }),
+      updateUser: (partial) =>
+        set((state) => ({
+          user: state.user
+            ? {
+                ...state.user,
+                ...partial,
+              }
+            : null,
+        })),
 
       logout: (silent = false) => {
         set({ token: null, user: null, isAuthenticated: false });

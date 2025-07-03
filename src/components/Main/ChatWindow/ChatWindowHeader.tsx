@@ -26,8 +26,20 @@ const ChatWindowHeader = ({ chat }: { chat: ChatUser }) => {
         <div className="truncate text-[16px] font-semibold">
           {chat.displayName}
         </div>
-        <div className="text-sm font-normal text-muted-foreground">
-          last seen recently
+        <div
+          className={`text-sm font-normal ${
+            chat.isOnline
+              ? "text-blue-400"
+              : chat.lastSeen
+              ? chat.lastSeen
+              : "text-muted-foreground"
+          }`}
+        >
+          {chat.isOnline
+            ? "Online"
+            : chat.lastSeen
+            ? chat.lastSeen
+            : "last seen recently"}
         </div>
       </div>
     </div>

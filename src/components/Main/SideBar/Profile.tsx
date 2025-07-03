@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/store/useAuthStore";
 import { AtSign, CircleDot, User } from "lucide-react";
-import { useEffect, useState } from "react";
 
 const Profile = ({
   setMode,
@@ -13,28 +12,16 @@ const Profile = ({
 }) => {
   const { user } = useAuthStore();
 
-  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl || "");
-  const [displayName, setDisplayName] = useState(user?.displayName || "");
-  const [username, setUsername] = useState(user?.username || "");
-  const [isOnline, setIsOnline] = useState(true);
-
-  useEffect(() => {
-    setAvatarUrl(user?.avatarUrl || "");
-    setDisplayName(user?.displayName || "");
-    setUsername(user?.username || "");
-    setIsOnline(true);
-  }, [user]);
-
   if (!user) return;
-  const getInitial = () => displayName?.charAt(0)?.toUpperCase() || "?";
+  const getInitial = () => user.displayName?.charAt(0)?.toUpperCase() || "?";
 
   return (
     <Card className="text-foreground w-full max-w-md mx-auto rounded-2xl shadow-md dark:bg-[#1e1e1e] bg-white overflow-hidden">
       {/* Avatar */}
       <div className="flex w-full justify-center rounded-2xl overflow-hidden">
-        {avatarUrl ? (
+        {user.avatarUrl ? (
           <img
-            src={avatarUrl}
+            src={user.avatarUrl}
             alt="Avatar"
             className="w-[260px] h-[260px] object-cover bg-muted"
           />
@@ -59,7 +46,7 @@ const Profile = ({
             <Label className="text-sm text-muted-foreground">
               Display Name
             </Label>
-            <p className="text-lg font-medium">{displayName}</p>
+            <p className="text-lg font-medium">{user.displayName}</p>
           </div>
         </div>
 
@@ -67,23 +54,23 @@ const Profile = ({
           <AtSign className="text-muted-foreground" size={22} />
           <div>
             <Label className="text-sm text-muted-foreground">Username</Label>
-            <p className="text-lg font-medium">@{username}</p>
+            <p className="text-lg font-medium">@{user.username}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
           <CircleDot
-            className={isOnline ? "text-green-500" : "text-gray-400"}
+            className={user.isOnline ? "text-green-500" : "text-gray-400"}
             size={22}
           />
           <div>
             <Label className="text-sm text-muted-foreground">Status</Label>
             <p
               className={`text-lg font-medium ${
-                isOnline ? "text-green-500" : "text-gray-400"
+                user.isOnline ? "text-green-500" : "text-gray-400"
               }`}
             >
-              {isOnline ? "Online" : "Offline"}
+              {user.isOnline ? "Online" : "Offline"}
             </p>
           </div>
         </div>
