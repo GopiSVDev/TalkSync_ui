@@ -2,17 +2,22 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useRef } from "react";
+import { useChatStore } from "@/store/useChatStore";
 
 const baseURL = import.meta.env.VITE_WEBSOCKET_URL;
+
 export const useStompClient = () => {
-  const token = useAuthStore.getState().token;
+  const token = useAuthStore((state) => state.token);
   const clientRef = useRef<Client | null>(null);
 
   useEffect(() => {
     if (!token) return;
-    console.log(token);
 
     const client = new Client({
+      heartbeatIncoming: 10000,
+      heartbeatOutgoing: 10000,
+      reconnectDelay: 5000,
+
       webSocketFactory: () => new SockJS(`${baseURL}/ws`),
 
       connectHeaders: {
@@ -20,7 +25,26 @@ export const useStompClient = () => {
       },
 
       onConnect: () => {
-        console.log("Stomp connected");
+        const subscription = client.subscribe(
+          "/topic/user/status",
+          (message) => {
+            const { userId, online } = JSON.parse(message.body);
+
+            const authUser = useAuthStore.getState().user;
+            const chatStore = useChatStore.getState();
+
+            if (authUser?.id === userId) {
+              useAuthStore.getState().updateUser({ isOnline: online });
+            }
+
+            chatStore.updateSelectedChatOnlineStatus(userId, online);
+          }
+        );
+
+        client.onDisconnect = () => {
+          console.log("🛑 STOMP disconnected");
+          subscription.unsubscribe();
+        };
       },
 
       onStompError: (frame) => {
@@ -34,27 +58,9 @@ export const useStompClient = () => {
     clientRef.current = client;
 
     return () => {
+      console.log("🧹 Deactivating STOMP client");
       client.deactivate();
+      clientRef.current = null;
     };
   }, [token]);
-
-  useEffect(() => {
-    const client = clientRef.current;
-    if (!client || !client.connected) return;
-
-    const subscription = client.subscribe("/topic/user/status", (message) => {
-      const { userId, online } = JSON.parse(message.body);
-
-      const authUser = useAuthStore.getState().user;
-      if (authUser?.id == userId) {
-        useAuthStore.getState().updateUser({ isOnline: online });
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [clientRef.current?.connected]);
-
-  return clientRef;
 };

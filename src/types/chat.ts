@@ -18,7 +18,7 @@ export interface ChatUser {
   lastMessage?: string;
   time?: string;
 
-  isOnline?: string;
+  isOnline?: boolean;
   lastSeen?: string;
 }
 

@@ -21,11 +21,15 @@ const SearchCard = ({
         <div className="flex items-center gap-4 h-full">
           {/* Avatar / Logo */}
           <div
-            className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white ${getAvatarColor(
+            className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white overflow-hidden ${getAvatarColor(
               chat.displayName
             )}`}
           >
-            {chat.displayName[0]}
+            {chat.avatarUrl ? (
+              <img src={chat.avatarUrl} />
+            ) : (
+              chat.displayName[0]
+            )}
           </div>
 
           {/* Chat Info */}

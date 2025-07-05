@@ -1,11 +1,13 @@
 import { ArrowLeft } from "lucide-react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
-import type { ChatUser } from "@/types/chat";
+import { formatLastSeen } from "@/utils/utility";
 
-const ChatWindowHeader = ({ chat }: { chat: ChatUser }) => {
+const ChatWindowHeader = () => {
+  const selectedChat = useChatStore((store) => store.selectedChat);
   const setSelectedChat = useChatStore((store) => store.setSelectedChat);
-  if (!chat) return;
+
+  if (!selectedChat) return;
 
   return (
     <div className="w-full p-4 border-b flex items-center gap-4 bg-white dark:bg-[#212121]">
@@ -16,30 +18,30 @@ const ChatWindowHeader = ({ chat }: { chat: ChatUser }) => {
       />
       <div
         className={`w-[40px] h-[40px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white overflow-hidden ${getAvatarColor(
-          chat.displayName
+          selectedChat.displayName
         )}`}
       >
-        {chat.avatarUrl ? <img src={chat.avatarUrl} /> : chat.displayName[0]}
+        {selectedChat.avatarUrl ? (
+          <img src={selectedChat.avatarUrl} />
+        ) : (
+          selectedChat.displayName[0]
+        )}
       </div>
 
       <div className="w-full flex flex-col min-w-0">
         <div className="truncate text-[16px] font-semibold">
-          {chat.displayName}
+          {selectedChat.displayName}
         </div>
         <div
-          className={`text-sm font-normal ${
-            chat.isOnline
-              ? "text-blue-400"
-              : chat.lastSeen
-              ? chat.lastSeen
-              : "text-muted-foreground"
+          className={`text-sm font-medium ${
+            selectedChat.isOnline ? "text-emerald-500" : "text-muted-foreground"
           }`}
         >
-          {chat.isOnline
+          {selectedChat.isOnline
             ? "Online"
-            : chat.lastSeen
-            ? chat.lastSeen
-            : "last seen recently"}
+            : selectedChat.lastSeen
+            ? formatLastSeen(selectedChat.lastSeen)
+            : "last seen unknown"}
         </div>
       </div>
     </div>

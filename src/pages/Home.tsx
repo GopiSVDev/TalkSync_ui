@@ -70,7 +70,7 @@ const Home = () => {
                 !selectedChat ? "hidden md:flex" : "flex"
               } flex-col`}
             >
-              <ChatWindow chat={selectedChat} />
+              <ChatWindow />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -83,7 +83,7 @@ const Home = () => {
             chats={chats}
           />
         ) : (
-          <ChatWindow chat={selectedChat} />
+          <ChatWindow />
         )}
       </div>
     </>

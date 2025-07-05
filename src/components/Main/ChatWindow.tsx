@@ -103,7 +103,7 @@ const dummyMessages: Message[] = [
 
 const currentUserId = "user_1";
 
-export default function ChatWindow({ chat }: { chat: ChatUser | null }) {
+export default function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>(dummyMessages);
 
   useEffect(() => {
@@ -134,12 +134,10 @@ export default function ChatWindow({ chat }: { chat: ChatUser | null }) {
     }
   }, [messages]);
 
-  if (!chat) return null;
-
   return (
     <div className="h-screen flex flex-col items-center z-10">
       {/* Header with status */}
-      <ChatWindowHeader chat={chat} />
+      <ChatWindowHeader />
 
       {/* message window */}
       <MessagesWindow messages={messages} />

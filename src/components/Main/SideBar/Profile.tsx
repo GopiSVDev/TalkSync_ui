@@ -1,7 +1,9 @@
+import { getUser } from "@/api/userApi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/store/useAuthStore";
 import { AtSign, CircleDot, User } from "lucide-react";
+import { useEffect } from "react";
 
 const Profile = ({
   setMode,
@@ -10,9 +12,23 @@ const Profile = ({
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
 }) => {
-  const { user } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const updateUser = useAuthStore((state) => state.updateUser);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    getUser(user.id)
+      .then((updated) => {
+        updateUser(updated);
+      })
+      .catch((err) => {
+        console.error("❌ Failed to fetch user info:", err);
+      });
+  }, [updateUser, user?.id]);
 
   if (!user) return;
+
   const getInitial = () => user.displayName?.charAt(0)?.toUpperCase() || "?";
 
   return (
@@ -42,19 +58,19 @@ const Profile = ({
       <CardContent className="space-y-5 py-6">
         <div className="flex items-center gap-4">
           <User className="text-muted-foreground" size={22} />
-          <div>
+          <div className="min-w-0">
             <Label className="text-sm text-muted-foreground">
               Display Name
             </Label>
-            <p className="text-lg font-medium">{user.displayName}</p>
+            <p className="text-lg font-medium truncate ">{user.displayName}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
           <AtSign className="text-muted-foreground" size={22} />
-          <div>
+          <div className="min-w-0">
             <Label className="text-sm text-muted-foreground">Username</Label>
-            <p className="text-lg font-medium">@{user.username}</p>
+            <p className="text-lg font-medium truncate">@{user.username}</p>
           </div>
         </div>
 
