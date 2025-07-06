@@ -1,10 +1,10 @@
 import ChatCard from "./ChatCard";
 import { useEffect, useState } from "react";
 import { getUserChats } from "@/api/chatApi";
-import type { ChatSummary } from "@/types/chat";
+import type { ChatDetail } from "@/types/chat";
 
 const ChatList = () => {
-  const [chats, setChats] = useState<ChatSummary[]>([]);
+  const [chats, setChats] = useState<ChatDetail[]>([]);
 
   useEffect(() => {
     const getChats = async () => {
@@ -18,8 +18,6 @@ const ChatList = () => {
 
     getChats();
   }, []);
-
-  console.log(chats);
 
   return (
     <>

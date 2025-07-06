@@ -1,9 +1,9 @@
-import type { ChatDetail, ChatSummary } from "@/types/chat";
+import type { ChatDetail } from "@/types/chat";
 import { create } from "zustand";
 
 type ChatStore = {
-  selectedChat: ChatDetail | ChatSummary | null;
-  setSelectedChat: (chat: ChatDetail | ChatSummary | null) => void;
+  selectedChat: ChatDetail | null;
+  setSelectedChat: (chat: ChatDetail | null) => void;
   updateSelectedChatOnlineStatus: (userId: string, isOnline: boolean) => void;
 };
 
@@ -14,12 +14,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   updateSelectedChatOnlineStatus: (userId, isOnline) => {
     const current = get().selectedChat;
 
-    if (
-      !current ||
-      !("participants" in current) ||
-      !Array.isArray(current.participants)
-    )
-      return;
+    if (!current) return;
 
     const updatedParticipants = current.participants.map((participant) =>
       participant.id == userId

@@ -8,6 +8,7 @@ import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/Search/SearchBar";
 import { searchUsers } from "@/api/userApi";
 import SearchList from "./SideBar/Search/SearchList";
+import { useRealTimeStore } from "@/store/realtimeStore";
 
 export default function SidebarContent({
   mode,
@@ -21,11 +22,11 @@ export default function SidebarContent({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UserBase[]>([]);
 
-  // const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
-  // const resultsWithStatus = searchResults.map((user) => ({
-  //   ...user,
-  //   isOnline: onlineUsers.includes(user.id),
-  // }));
+  const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
+  const resultsWithStatus = searchResults.map((user) => ({
+    ...user,
+    isOnline: onlineUsers[user.id] ? true : false,
+  }));
 
   useEffect(() => {
     const fetch = async () => {
@@ -48,7 +49,7 @@ export default function SidebarContent({
     chats: <ChatList />,
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
-    search: <SearchList results={searchResults} />,
+    search: <SearchList results={resultsWithStatus} />,
   };
 
   return (

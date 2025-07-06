@@ -2,10 +2,25 @@ import { ArrowLeft } from "lucide-react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
 import { formatLastSeen } from "@/utils/utility";
+import { useRealTimeStore } from "@/store/realtimeStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const ChatWindowHeader = () => {
   const selectedChat = useChatStore((store) => store.selectedChat);
   const setSelectedChat = useChatStore((store) => store.setSelectedChat);
+
+  const authUser = useAuthStore((state) => state.user);
+  const otherUser = selectedChat?.participants?.find(
+    (p) => p.id != authUser?.id
+  );
+
+  const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
+
+  const isOnline = otherUser
+    ? onlineUsers[otherUser.id] ?? otherUser.isOnline ?? false
+    : false;
+
+  console.log(otherUser);
 
   if (!selectedChat) return;
 
@@ -34,13 +49,13 @@ const ChatWindowHeader = () => {
         </div>
         <div
           className={`text-sm font-medium ${
-            selectedChat.isOnline ? "text-emerald-500" : "text-muted-foreground"
+            isOnline ? "text-emerald-500" : "text-muted-foreground"
           }`}
         >
-          {selectedChat.isOnline
+          {isOnline
             ? "Online"
-            : selectedChat.lastSeen
-            ? formatLastSeen(selectedChat.lastSeen)
+            : otherUser?.lastSeen
+            ? formatLastSeen(otherUser.lastSeen)
             : "last seen unknown"}
         </div>
       </div>

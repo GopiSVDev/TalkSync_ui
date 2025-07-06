@@ -7,14 +7,11 @@ export interface ChatBase {
   isGroup: boolean;
 }
 
-export interface ChatSummary extends ChatBase {
+export interface ChatDetail extends ChatBase {
   lastMessage?: string;
   lastMessageTime?: string;
   isOnline?: boolean;
   lastSeen?: string;
-}
-
-export interface ChatDetail extends ChatSummary {
   participants: ChatParticpant[];
   createdAt: string;
 }

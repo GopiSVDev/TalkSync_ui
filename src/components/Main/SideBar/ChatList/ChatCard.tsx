@@ -2,11 +2,21 @@ import { Card } from "../../../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
-import type { ChatSummary } from "@/types/chat";
+import type { ChatDetail } from "@/types/chat";
+import { useRealTimeStore } from "@/store/realtimeStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
-const ChatCard = ({ chat }: { chat: ChatSummary }) => {
+const ChatCard = ({ chat }: { chat: ChatDetail }) => {
   const selectedChat = useChatStore((state) => state.selectedChat);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
+
+  const authUser = useAuthStore((state) => state.user);
+  const otherUser = chat.participants.find((p) => p.id != authUser?.id);
+  const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
+
+  const isOnline = otherUser
+    ? onlineUsers[otherUser.id] ?? otherUser.isOnline ?? false
+    : false;
 
   const rippleRef = useRef<HTMLDivElement>(
     null
@@ -45,7 +55,6 @@ const ChatCard = ({ chat }: { chat: ChatSummary }) => {
 
   const isSelected = selectedChat?.chatId == chat.chatId;
   const displayName = chat.name;
-
   const avatarLetter = displayName[0]?.toUpperCase() || "?";
 
   if (!chat) return null;
@@ -78,7 +87,7 @@ const ChatCard = ({ chat }: { chat: ChatSummary }) => {
 
             <span
               className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-                chat.isOnline ? "bg-green-500" : "bg-gray-400"
+                isOnline ? "bg-green-500" : "bg-gray-400"
               }`}
             ></span>
           </div>
