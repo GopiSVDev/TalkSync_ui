@@ -3,6 +3,7 @@ import { Client } from "@stomp/stompjs";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useRef } from "react";
 import { useChatStore } from "@/store/useChatStore";
+import { useRealTimeStore } from "@/store/realtimeStore";
 
 const baseURL = import.meta.env.VITE_WEBSOCKET_URL;
 
@@ -30,14 +31,17 @@ export const useStompClient = () => {
           (message) => {
             const { userId, online } = JSON.parse(message.body);
 
-            const authUser = useAuthStore.getState().user;
+            const authStore = useAuthStore.getState();
             const chatStore = useChatStore.getState();
+            const realTimeStore = useRealTimeStore.getState();
 
-            if (authUser?.id === userId) {
+            if (authStore.user?.id === userId) {
               useAuthStore.getState().updateUser({ isOnline: online });
             }
 
             chatStore.updateSelectedChatOnlineStatus(userId, online);
+
+            realTimeStore.setOnlineStatus(userId, online);
           }
         );
 

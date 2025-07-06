@@ -18,19 +18,19 @@ const ChatWindowHeader = () => {
       />
       <div
         className={`w-[40px] h-[40px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white overflow-hidden ${getAvatarColor(
-          selectedChat.displayName
+          selectedChat.name
         )}`}
       >
         {selectedChat.avatarUrl ? (
           <img src={selectedChat.avatarUrl} />
         ) : (
-          selectedChat.displayName[0]
+          selectedChat.name[0]
         )}
       </div>
 
       <div className="w-full flex flex-col min-w-0">
         <div className="truncate text-[16px] font-semibold">
-          {selectedChat.displayName}
+          {selectedChat.name}
         </div>
         <div
           className={`text-sm font-medium ${

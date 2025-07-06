@@ -1,4 +1,4 @@
-import type { ChatUser } from "@/types/chat";
+import type { UserBase } from "@/types/user";
 import axios from "./axiosInstance";
 
 interface RegisterPayload {
@@ -14,7 +14,7 @@ interface LoginPayload {
 
 interface LoginResponse {
   token: string;
-  user: ChatUser;
+  user: UserBase;
 }
 
 export interface UpdateProfilePayload {

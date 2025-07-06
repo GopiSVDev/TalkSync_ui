@@ -1,4 +1,4 @@
-import type { ChatUser } from "@/types/chat";
+import type { UserBase } from "@/types/user";
 import { isTokenExpired } from "@/utils/jwt";
 import axios from "axios";
 import { toast } from "sonner";
@@ -7,13 +7,13 @@ import { persist } from "zustand/middleware";
 
 interface AuthState {
   token: string | null;
-  user: ChatUser | null;
+  user: UserBase | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 
   setToken: (token: string | null) => void;
-  setUser: (user: ChatUser | null) => void;
-  updateUser: (partial: Partial<ChatUser>) => void;
+  setUser: (user: UserBase | null) => void;
+  updateUser: (partial: Partial<UserBase>) => void;
   logout: (silent?: boolean) => void;
   validateToken: () => boolean;
 }

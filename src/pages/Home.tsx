@@ -5,40 +5,10 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { ChatUser } from "@/types/chat";
 import { useState } from "react";
 import { useChatStore } from "@/store/useChatStore";
 
-// const mockChats: ChatUser[] = [
-//   {
-//     id: "1",
-//     displayName: "Alice",
-//     username: "alice",
-//     lastMessage: "Hey, how are you?",
-//     avatarUrl:
-//       "https://cdn.pixabay.com/photo/2021/02/25/19/20/wojak-6049880_1280.png",
-//     time: "10:24 AM",
-//   },
-//   {
-//     id: "2",
-//     displayName: "Bob",
-//     username: "bob",
-//     lastMessage: "Got the file, thanks!",
-//     avatarUrl: "",
-//     time: "9:15 AM",
-//   },
-//   {
-//     id: "3",
-//     displayName: "Charlie",
-//     username: "charlie",
-//     lastMessage: "Let's catch up tomorrow.",
-//     avatarUrl: "",
-//     time: "Yesterday",
-//   },
-// ];
-
 const Home = () => {
-  const [chats, setChats] = useState<ChatUser[]>([]);
   const selectedChat = useChatStore((state) => state.selectedChat);
 
   const [sidebarMode, setSidebarMode] = useState<
@@ -55,11 +25,7 @@ const Home = () => {
             maxSize={30}
             className="border-r bg-white dark:bg-[#212121] z-10"
           >
-            <SidebarContent
-              mode={sidebarMode}
-              setMode={setSidebarMode}
-              chats={chats}
-            />
+            <SidebarContent mode={sidebarMode} setMode={setSidebarMode} />
           </ResizablePanel>
 
           <ResizableHandle className="bg-border" />
@@ -77,11 +43,7 @@ const Home = () => {
       </div>
       <div className="chat-bg h-screen w-full flex flex-col md:hidden">
         {!selectedChat ? (
-          <SidebarContent
-            mode={sidebarMode}
-            setMode={setSidebarMode}
-            chats={chats}
-          />
+          <SidebarContent mode={sidebarMode} setMode={setSidebarMode} />
         ) : (
           <ChatWindow />
         )}

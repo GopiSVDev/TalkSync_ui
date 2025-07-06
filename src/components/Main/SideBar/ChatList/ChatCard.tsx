@@ -1,10 +1,10 @@
-import type { ChatUser } from "@/types/chat";
 import { Card } from "../../../ui/card";
 import { useRef } from "react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
+import type { ChatSummary } from "@/types/chat";
 
-const ChatCard = ({ chat }: { chat: ChatUser }) => {
+const ChatCard = ({ chat }: { chat: ChatSummary }) => {
   const selectedChat = useChatStore((state) => state.selectedChat);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
@@ -43,13 +43,16 @@ const ChatCard = ({ chat }: { chat: ChatUser }) => {
     setTimeout(() => ripple.remove(), 600);
   };
 
-  if (!chat) return;
+  const isSelected = selectedChat?.chatId == chat.chatId;
+  const displayName = chat.name;
 
+  const avatarLetter = displayName[0]?.toUpperCase() || "?";
+
+  if (!chat) return null;
   return (
     <Card
-      key={chat.id}
       className={`relative overflow-hidden px-4 py-2 cursor-pointer border-none h-[84px] bg-white dark:bg-[#212121] ${
-        selectedChat?.id === chat.id
+        selectedChat?.chatId === chat.chatId
           ? "bg-[#3390ec] dark:bg-[#766ac8]"
           : "hover:bg-[rgb(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
       }`}
@@ -64,38 +67,40 @@ const ChatCard = ({ chat }: { chat: ChatUser }) => {
       >
         <div className="flex items-center gap-4 h-full">
           {/* Avatar / Logo */}
-          <div
-            className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white overflow-hidden ${getAvatarColor(
-              chat.displayName
-            )}`}
-          >
-            {chat.avatarUrl ? (
-              <img src={chat.avatarUrl} />
-            ) : (
-              chat.displayName[0]
-            )}
+          <div className="relative">
+            <div
+              className={`w-[56px] h-[56px] rounded-full shrink-0 flex items-center justify-center text-lg font-medium text-white overflow-hidden ${getAvatarColor(
+                displayName
+              )}`}
+            >
+              {chat.avatarUrl ? <img src={chat.avatarUrl} /> : avatarLetter}
+            </div>
+
+            <span
+              className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                chat.isOnline ? "bg-green-500" : "bg-gray-400"
+              }`}
+            ></span>
           </div>
 
           {/* Chat Info */}
           <div className="flex flex-col flex-1 min-w-0">
-            <div className="text-[16px] font-semibold text-foreground truncate flex justify-between items-center gap-3">
-              <p
-                className={`${selectedChat?.id == chat.id ? "text-white" : ""}`}
-              >
-                {chat.displayName}
+            <div className="text-[16px] font-semibold text-foreground  flex justify-between items-center gap-3">
+              <p className={`truncate ${isSelected ? "text-white" : ""}`}>
+                {displayName}
               </p>
               <p
                 className={`truncate text-[12px] font-light ${
-                  selectedChat?.id == chat.id ? "text-white" : ""
+                  isSelected ? "text-white" : ""
                 }`}
               >
-                {chat.time}
+                {chat.lastMessageTime || ""}
               </p>
             </div>
             {chat.lastMessage && (
               <div
                 className={`text-sm text-muted-foreground truncate ${
-                  selectedChat?.id == chat.id ? "text-white" : ""
+                  selectedChat?.chatId == chat.chatId ? "text-white" : ""
                 }`}
               >
                 {chat.lastMessage}

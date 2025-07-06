@@ -1,4 +1,4 @@
-import type { ChatUser } from "@/types/chat";
+import type { ChatUser } from "@/types/user";
 import ChatWindowHeader from "./ChatWindow/ChatWindowHeader";
 import MessagesWindow from "./ChatWindow/MessagesWindow";
 import ChatInputWithButton from "./ChatWindow/ChatInputWithButton";

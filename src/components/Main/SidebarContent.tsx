@@ -1,6 +1,6 @@
 import { DropDownMenu } from "./SideBar/DropDownMenu";
 import ChatList from "./SideBar/ChatList/ChatList";
-import type { ChatUser } from "@/types/chat";
+import type { UserBase } from "@/types/user";
 import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
 import { useEffect, useState, type JSX } from "react";
@@ -8,22 +8,24 @@ import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/Search/SearchBar";
 import { searchUsers } from "@/api/userApi";
 import SearchList from "./SideBar/Search/SearchList";
-import { useChatStore } from "@/store/useChatStore";
 
 export default function SidebarContent({
   mode,
   setMode,
-  chats,
 }: {
   mode: string;
   setMode: React.Dispatch<
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
-  chats: ChatUser[];
 }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<ChatUser[]>([]);
-  const setSelectedChat = useChatStore((state) => state.setSelectedChat);
+  const [searchResults, setSearchResults] = useState<UserBase[]>([]);
+
+  // const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
+  // const resultsWithStatus = searchResults.map((user) => ({
+  //   ...user,
+  //   isOnline: onlineUsers.includes(user.id),
+  // }));
 
   useEffect(() => {
     const fetch = async () => {
@@ -43,12 +45,10 @@ export default function SidebarContent({
   }, [searchQuery]);
 
   const components: Record<string, JSX.Element> = {
-    chats: <ChatList chats={chats} />,
+    chats: <ChatList />,
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
-    search: (
-      <SearchList chats={searchResults} setSelectedChat={setSelectedChat} />
-    ),
+    search: <SearchList results={searchResults} />,
   };
 
   return (

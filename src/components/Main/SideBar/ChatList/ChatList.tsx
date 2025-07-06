@@ -1,11 +1,30 @@
-import type { ChatUser } from "@/types/chat";
 import ChatCard from "./ChatCard";
+import { useEffect, useState } from "react";
+import { getUserChats } from "@/api/chatApi";
+import type { ChatSummary } from "@/types/chat";
 
-const ChatList = ({ chats }: { chats: ChatUser[] }) => {
+const ChatList = () => {
+  const [chats, setChats] = useState<ChatSummary[]>([]);
+
+  useEffect(() => {
+    const getChats = async () => {
+      try {
+        const chats = await getUserChats();
+        setChats(chats);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    getChats();
+  }, []);
+
+  console.log(chats);
+
   return (
     <>
       {chats.length > 0 ? (
-        chats.map((chat) => <ChatCard key={chat.id} chat={chat} />)
+        chats.map((chat) => <ChatCard key={chat.chatId} chat={chat} />)
       ) : (
         <div className="w-full h-full flex flex-col items-center px-4 pt-10">
           <h1 className="text-2xl font-medium">No Chats Yet</h1>
