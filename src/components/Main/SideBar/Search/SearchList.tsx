@@ -1,7 +1,42 @@
 import type { UserBase } from "@/types/user";
 import SearchCard from "./SearchCard";
+import { useEffect, useState } from "react";
+import { useRealTimeStore } from "@/store/realtimeStore";
+import { searchUsers } from "@/api/userApi";
 
-const SearchList = ({ results }: { results: UserBase[] }) => {
+const SearchList = ({ searchQuery }: { searchQuery: string }) => {
+  const [searchResults, setSearchResults] = useState<UserBase[]>([]);
+
+  const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
+  const results = searchResults.map((user) => ({
+    ...user,
+    isOnline: onlineUsers[user.id] ?? user.isOnline ?? false,
+  }));
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const data = await searchUsers(searchQuery);
+        setSearchResults(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const trimmedQuery = searchQuery.trim();
+
+    if (!trimmedQuery) {
+      setSearchResults([]);
+      return;
+    }
+
+    const debounceTimeOut = setTimeout(() => {
+      fetch();
+    }, 500);
+
+    return () => clearTimeout(debounceTimeOut);
+  }, [searchQuery]);
+
   return (
     <div>
       {results.length > 0 && (

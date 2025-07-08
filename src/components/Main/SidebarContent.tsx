@@ -1,14 +1,11 @@
 import { DropDownMenu } from "./SideBar/DropDownMenu";
 import ChatList from "./SideBar/ChatList/ChatList";
-import type { UserBase } from "@/types/user";
 import Settings from "./SideBar/Settings";
 import Profile from "./SideBar/Profile";
-import { useEffect, useState, type JSX } from "react";
+import { useState, type JSX } from "react";
 import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/Search/SearchBar";
-import { searchUsers } from "@/api/userApi";
 import SearchList from "./SideBar/Search/SearchList";
-import { useRealTimeStore } from "@/store/realtimeStore";
 
 export default function SidebarContent({
   mode,
@@ -20,36 +17,12 @@ export default function SidebarContent({
   >;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<UserBase[]>([]);
-
-  const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
-  const resultsWithStatus = searchResults.map((user) => ({
-    ...user,
-    isOnline: onlineUsers[user.id] ? true : false,
-  }));
-
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const data = await searchUsers(searchQuery);
-        setSearchResults(data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    if (searchQuery.trim()) {
-      fetch();
-    } else {
-      setSearchResults([]);
-    }
-  }, [searchQuery]);
 
   const components: Record<string, JSX.Element> = {
     chats: <ChatList />,
     settings: <Settings setMode={setMode} />,
     profile: <Profile setMode={setMode} />,
-    search: <SearchList results={resultsWithStatus} />,
+    search: <SearchList searchQuery={searchQuery} />,
   };
 
   return (

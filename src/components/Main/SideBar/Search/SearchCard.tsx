@@ -4,12 +4,10 @@ import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import type { UserBase } from "@/types/user";
 import { getOrCreatePrivateChat } from "@/api/chatApi";
-import { useRealTimeStore } from "@/store/realtimeStore";
 
 const SearchCard = ({ user }: { user: UserBase }) => {
   const authUser = useAuthStore((state) => state.user);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
-  const isOnline = useRealTimeStore((state) => !!state.onlineUsers[user.id]);
 
   const handleClick = async () => {
     if (!authUser?.id) return;
@@ -25,6 +23,7 @@ const SearchCard = ({ user }: { user: UserBase }) => {
   if (!user) return;
 
   const displayName = user.displayName;
+  const isOnline = user.isOnline;
 
   return (
     <Card
