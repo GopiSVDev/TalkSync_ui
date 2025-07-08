@@ -16,3 +16,7 @@ export const getOrCreatePrivateChat = async (
 
   return response.data;
 };
+
+export const deleteChat = async (chatId: string) => {
+  await axios.delete(`/chat/${chatId}`);
+};

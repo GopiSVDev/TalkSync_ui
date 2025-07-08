@@ -1,22 +1,12 @@
 import ChatCard from "./ChatCard";
-import { useEffect, useState } from "react";
-import { getUserChats } from "@/api/chatApi";
-import type { ChatDetail } from "@/types/chat";
+import { useEffect } from "react";
+import { useChatStore } from "@/store/useChatStore";
 
 const ChatList = () => {
-  const [chats, setChats] = useState<ChatDetail[]>([]);
+  const { chats, fetchChats } = useChatStore();
 
   useEffect(() => {
-    const getChats = async () => {
-      try {
-        const chats = await getUserChats();
-        setChats(chats);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    getChats();
+    fetchChats();
   }, []);
 
   return (

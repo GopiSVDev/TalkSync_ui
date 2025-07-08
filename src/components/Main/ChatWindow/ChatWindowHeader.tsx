@@ -1,14 +1,23 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, EllipsisVertical, Trash } from "lucide-react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
 import { formatLastSeen } from "@/utils/utility";
 import { useRealTimeStore } from "@/store/realtimeStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { deleteChat } from "@/api/chatApi";
 
 const ChatWindowHeader = () => {
   const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
   const selectedChat = useChatStore((store) => store.selectedChat);
   const setSelectedChat = useChatStore((store) => store.setSelectedChat);
+  const { fetchChats } = useChatStore();
 
   const authUser = useAuthStore((state) => state.user);
 
@@ -23,6 +32,21 @@ const ChatWindowHeader = () => {
   const isOnline = otherUser
     ? onlineUsers[otherUser.id] ?? otherUser.isOnline ?? false
     : false;
+
+  const handleDelete = async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this chat?"
+    );
+    if (!confirm) return;
+
+    try {
+      await deleteChat(selectedChat.chatId);
+      setSelectedChat(null);
+      await fetchChats();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   if (!selectedChat) return;
 
@@ -61,6 +85,29 @@ const ChatWindowHeader = () => {
             : "last seen unknown"}
         </div>
       </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild className="p-0">
+          <Button
+            className="cursor-pointer bg-white hover:bg-[rgba(244,244,245)] dark:bg-[#212121] dark:hover:bg-[rgba(44,44,44)] rounded-4xl p-0"
+            variant="secondary"
+          >
+            <EllipsisVertical className="!h-5 !w-5" size={30} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-56 bg-white/70 dark:bg-[#212121]/80 backdrop-blur-sm border-none shadow-md space-y-1.5"
+          align="start"
+        >
+          <DropdownMenuItem
+            className="font-medium cursor-pointer data-[highlighted]:bg-gray-200/70 dark:hover:bg-black/30"
+            onClick={handleDelete}
+          >
+            <Trash />
+            Delete Chat
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
