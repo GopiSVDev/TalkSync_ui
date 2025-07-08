@@ -26,28 +26,45 @@ export const useStompClient = () => {
       },
 
       onConnect: () => {
-        const subscription = client.subscribe(
-          "/topic/user/status",
-          (message) => {
-            const { userId, online } = JSON.parse(message.body);
+        const statusSub = client.subscribe("/topic/user/status", (message) => {
+          const { userId, online } = JSON.parse(message.body);
 
-            const authStore = useAuthStore.getState();
-            const chatStore = useChatStore.getState();
-            const realTimeStore = useRealTimeStore.getState();
+          const authStore = useAuthStore.getState();
+          const chatStore = useChatStore.getState();
+          const realTimeStore = useRealTimeStore.getState();
 
-            if (authStore.user?.id === userId) {
-              useAuthStore.getState().updateUser({ isOnline: online });
-            }
-
-            chatStore.updateSelectedChatOnlineStatus(userId, online);
-
-            realTimeStore.setOnlineStatus(userId, online);
+          if (authStore.user?.id === userId) {
+            useAuthStore.getState().updateUser({ isOnline: online });
           }
-        );
+
+          chatStore.updateSelectedChatOnlineStatus(userId, online);
+
+          realTimeStore.setOnlineStatus(userId, online);
+        });
+
+        const selectedChatId = useChatStore.getState().selectedChat?.chatId;
+
+        const typingSub = selectedChatId
+          ? client.subscribe(
+              `/topic/chat/${selectedChatId}/typing`,
+              (message) => {
+                const { chatId, userId, typing } = JSON.parse(message.body);
+
+                const authUserId = useAuthStore.getState().user?.id;
+
+                if (userId !== authUserId) {
+                  useRealTimeStore
+                    .getState()
+                    .setTypingStatus(chatId, userId, typing);
+                }
+              }
+            )
+          : null;
 
         client.onDisconnect = () => {
           console.log("🛑 STOMP disconnected");
-          subscription.unsubscribe();
+          statusSub.unsubscribe();
+          typingSub?.unsubscribe();
         };
       },
 
@@ -67,4 +84,6 @@ export const useStompClient = () => {
       clientRef.current = null;
     };
   }, [token]);
+
+  return clientRef.current;
 };

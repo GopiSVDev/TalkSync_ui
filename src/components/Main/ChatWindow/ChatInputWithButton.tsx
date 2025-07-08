@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SendHorizonal, Smile } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTheme } from "@/hooks/use-theme";
 import type { EmojiPickerEmoji } from "@/types/emoji";
 import type { Message } from "@/types/message";
+import { useStompClient } from "@/hooks/useStompClient";
+import { useChatStore } from "@/store/useChatStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const ChatInputWithButton = ({
   setMessages,
@@ -17,6 +20,25 @@ const ChatInputWithButton = ({
   const [msg, setMsg] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const client = useStompClient();
+  const selectedChat = useChatStore((state) => state.selectedChat);
+  const authUser = useAuthStore.getState().user;
+
+  const typingTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const sendTypingStatus = (isTyping: boolean) => {
+    if (!authUser?.id || !selectedChat?.chatId || !client || !client.connected)
+      return;
+
+    client.publish({
+      destination: "/app/typing",
+      body: JSON.stringify({
+        chatId: selectedChat.chatId,
+        userId: authUser.id,
+        typing: isTyping,
+      }),
+    });
+  };
 
   const insertEmojiAtCursor = (emoji: EmojiPickerEmoji) => {
     const emojiChar = emoji.native;
@@ -35,6 +57,12 @@ const ChatInputWithButton = ({
         start + emojiChar.length;
     }, 0);
   };
+
+  useEffect(() => {
+    return () => {
+      if (typingTimeout.current) clearTimeout(typingTimeout.current);
+    };
+  }, []);
 
   const currentUserId = "user_1";
 
@@ -88,7 +116,17 @@ const ChatInputWithButton = ({
               setMsg("");
             }
           }}
-          onChange={(e) => setMsg(e.target.value)}
+          onChange={(e) => {
+            setMsg(e.target.value);
+
+            sendTypingStatus(true);
+
+            if (typingTimeout.current) clearTimeout(typingTimeout.current);
+
+            typingTimeout.current = setTimeout(() => {
+              sendTypingStatus(false);
+            }, 1000);
+          }}
         />
       </div>
       <Button

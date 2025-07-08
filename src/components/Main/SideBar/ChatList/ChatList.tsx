@@ -7,7 +7,7 @@ const ChatList = () => {
 
   useEffect(() => {
     fetchChats();
-  }, []);
+  }, [fetchChats]);
 
   return (
     <>

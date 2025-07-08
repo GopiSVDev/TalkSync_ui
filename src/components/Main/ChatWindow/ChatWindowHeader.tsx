@@ -15,23 +15,28 @@ import { deleteChat } from "@/api/chatApi";
 
 const ChatWindowHeader = () => {
   const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
+  const typingStatus = useRealTimeStore((s) => s.typingStatus);
+
   const selectedChat = useChatStore((store) => store.selectedChat);
+  const selectedChatId = selectedChat?.chatId;
   const setSelectedChat = useChatStore((store) => store.setSelectedChat);
+
   const { fetchChats } = useChatStore();
 
-  const authUser = useAuthStore((state) => state.user);
+  const authUserId = useAuthStore((state) => state.user?.id);
 
   if (!selectedChat?.participants || selectedChat.participants.length === 0) {
     return null;
   }
 
-  const otherUser = selectedChat?.participants?.find(
-    (p) => p.id != authUser?.id
-  );
+  const otherUser = selectedChat?.participants?.find((p) => p.id != authUserId);
 
   const isOnline = otherUser
     ? onlineUsers[otherUser.id] ?? otherUser.isOnline ?? false
     : false;
+
+  const typingUsers = typingStatus[selectedChatId ?? ""] || [];
+  const othersTyping = typingUsers.filter((id: string) => id !== authUserId);
 
   const handleDelete = async () => {
     const confirm = window.confirm(
@@ -78,11 +83,13 @@ const ChatWindowHeader = () => {
             isOnline ? "text-emerald-500" : "text-muted-foreground"
           }`}
         >
-          {isOnline
+          {othersTyping.length > 0
+            ? "Typing..."
+            : isOnline
             ? "Online"
             : otherUser?.lastSeen
             ? formatLastSeen(otherUser.lastSeen)
-            : "last seen unknown"}
+            : "Last seen unknown"}
         </div>
       </div>
 
