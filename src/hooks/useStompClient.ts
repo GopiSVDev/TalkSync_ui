@@ -3,7 +3,8 @@ import { Client } from "@stomp/stompjs";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect, useRef } from "react";
 import { useChatStore } from "@/store/useChatStore";
-import { useRealTimeStore } from "@/store/realtimeStore";
+import { useRealTimeStore } from "@/store/useRealtimeStore";
+import { useMessageStore } from "@/store/useMessageStore";
 
 const baseURL = import.meta.env.VITE_WEBSOCKET_URL;
 
@@ -61,10 +62,20 @@ export const useStompClient = () => {
             )
           : null;
 
+        const addMessage = useMessageStore.getState().addMessage;
+
+        const messageSub = selectedChatId
+          ? client.subscribe(`/topic/chat.${selectedChatId}`, (message) => {
+              const newMessage = JSON.parse(message.body);
+              addMessage(selectedChatId, newMessage);
+            })
+          : null;
+
         client.onDisconnect = () => {
           console.log("🛑 STOMP disconnected");
           statusSub.unsubscribe();
           typingSub?.unsubscribe();
+          messageSub?.unsubscribe();
         };
       },
 

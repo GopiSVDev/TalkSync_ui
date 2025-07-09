@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
 import type { ChatDetail } from "@/types/chat";
-import { useRealTimeStore } from "@/store/realtimeStore";
+import { useRealTimeStore } from "@/store/useRealtimeStore";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const ChatCard = ({ chat }: { chat: ChatDetail }) => {

@@ -1,7 +1,7 @@
 import type { UserBase } from "@/types/user";
 import SearchCard from "./SearchCard";
 import { useEffect, useState } from "react";
-import { useRealTimeStore } from "@/store/realtimeStore";
+import { useRealTimeStore } from "@/store/useRealtimeStore";
 import { searchUsers } from "@/api/userApi";
 
 const SearchList = ({ searchQuery }: { searchQuery: string }) => {

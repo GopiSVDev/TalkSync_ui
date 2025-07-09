@@ -2,7 +2,7 @@ import { ArrowLeft, EllipsisVertical, Trash } from "lucide-react";
 import { getAvatarColor } from "@/utils/avatarColor";
 import { useChatStore } from "@/store/useChatStore";
 import { formatLastSeen } from "@/utils/utility";
-import { useRealTimeStore } from "@/store/realtimeStore";
+import { useRealTimeStore } from "@/store/useRealtimeStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { deleteChat } from "@/api/chatApi";
+import { toast } from "sonner";
 
 const ChatWindowHeader = () => {
   const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
@@ -49,6 +50,7 @@ const ChatWindowHeader = () => {
       setSelectedChat(null);
       await fetchChats();
     } catch (err) {
+      toast.error("Failed To Delete Chat");
       console.log(err);
     }
   };
@@ -84,7 +86,7 @@ const ChatWindowHeader = () => {
           }`}
         >
           {othersTyping.length > 0
-            ? "Typing..."
+            ? "typing..."
             : isOnline
             ? "Online"
             : otherUser?.lastSeen

@@ -6,21 +6,17 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { useTheme } from "@/hooks/use-theme";
 import type { EmojiPickerEmoji } from "@/types/emoji";
-import type { Message } from "@/types/message";
 import { useStompClient } from "@/hooks/useStompClient";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
 
-const ChatInputWithButton = ({
-  setMessages,
-}: {
-  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-}) => {
+const ChatInputWithButton = () => {
   const { theme } = useTheme();
   const [msg, setMsg] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const client = useStompClient();
+
   const selectedChat = useChatStore((state) => state.selectedChat);
   const authUser = useAuthStore.getState().user;
 
@@ -64,23 +60,32 @@ const ChatInputWithButton = ({
     };
   }, []);
 
-  const currentUserId = "user_1";
+  if (!selectedChat) return;
 
   function sendMessage(text: string) {
-    const newMessage = {
-      id: Date.now().toString(),
-      chatId: "1",
-      senderId: currentUserId,
-      text,
-      createdAt: new Date().toISOString(),
-    };
+    if (
+      !selectedChat ||
+      !authUser ||
+      !text.trim() ||
+      !client ||
+      !client.connected
+    )
+      return;
 
-    setMessages((prev) => [...prev, newMessage]);
+    client.publish({
+      destination: "/app/chat.send",
+      body: JSON.stringify({
+        chatId: selectedChat.chatId,
+        userId: authUser.id,
+        content: text.trim(),
+      }),
+    });
+
     setMsg("");
   }
 
   return (
-    <div className="w-full items-center max-w-[700px] py-2 px-4 flex gap-2 h-auto">
+    <div className="w-full items-center max-w-[700px] pb-2 px-4 flex gap-2 h-auto">
       <div className="bg-white dark:bg-[#212121] w-full flex items-center gap-1 px-4 rounded-3xl min-w-0">
         <div className="relative">
           <Smile
@@ -105,8 +110,9 @@ const ChatInputWithButton = ({
           )}
         </div>
         <Textarea
+          rows={1}
           ref={textareaRef}
-          className="w-full py-4 px-3 h-fit border-none active:border-none resize-none overflow-y-auto max-h-40 break-words dark:bg-[#212121] text-[16px]"
+          className="w-full py-2 px-3 h-fit border-none active:border-none resize-none overflow-y-auto max-h-40 break-words dark:bg-[#212121] text-[16px]"
           placeholder="Message"
           value={msg}
           onKeyDown={(e) => {
@@ -126,6 +132,16 @@ const ChatInputWithButton = ({
             typingTimeout.current = setTimeout(() => {
               sendTypingStatus(false);
             }, 1000);
+
+            const el = textareaRef.current;
+            if (el) {
+              el.style.height = "auto";
+              el.style.height = `${el.scrollHeight}px`;
+            }
+          }}
+          style={{
+            minHeight: "48px",
+            fontSize: "16px",
           }}
         />
       </div>

@@ -1,14 +1,23 @@
 import type { Message } from "@/types/message";
 import { groupMessagesByDate } from "@/utils/utility";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import AudioMessage from "./Messages/AudioMessage";
 import FileMessage from "./Messages/FileMessage";
 import TextMessage from "./Messages/TextMessage";
 import TimeStampForMedia from "./Messages/TimeStampForMedia";
 import ImageMessage from "./Messages/ImageMessage";
 import VideoMessage from "./Messages/VideoMessage";
+import { useMessageStore } from "@/store/useMessageStore";
+import { useChatStore } from "@/store/useChatStore";
 
-const MessagesWindow = ({ messages }: { messages: Message[] }) => {
+const MessagesWindow = () => {
+  const selectedChatId = useChatStore((state) => state.selectedChat?.chatId);
+  const messagesByChat = useMessageStore((state) => state.messagesByChat);
+
+  const messages = useMemo(() => {
+    return messagesByChat[selectedChatId ?? ""] ?? [];
+  }, [messagesByChat, selectedChatId]);
+
   const chatContainerRef = useRef(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -16,10 +25,12 @@ const MessagesWindow = ({ messages }: { messages: Message[] }) => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sortedMessages = [...messages].sort(
-    (a: Message, b: Message) =>
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-  );
+  const sortedMessages = useMemo(() => {
+    return [...messages].sort(
+      (a: Message, b: Message) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+  }, [messages]);
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
   const currentUserId = "userA";
