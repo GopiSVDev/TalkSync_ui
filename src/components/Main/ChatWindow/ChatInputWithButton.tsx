@@ -62,27 +62,20 @@ const ChatInputWithButton = () => {
 
   if (!selectedChat) return;
 
-  function sendMessage(text: string) {
-    if (
-      !selectedChat ||
-      !authUser ||
-      !text.trim() ||
-      !client ||
-      !client.connected
-    )
-      return;
+  const sendMessage = () => {
+    if (!selectedChat || !authUser || !client || !client.connected) return;
 
     client.publish({
       destination: "/app/chat.send",
       body: JSON.stringify({
         chatId: selectedChat.chatId,
-        userId: authUser.id,
-        content: text.trim(),
+        senderId: authUser.id,
+        content: msg.trim(),
       }),
     });
 
     setMsg("");
-  }
+  };
 
   return (
     <div className="w-full items-center max-w-[700px] pb-2 px-4 flex gap-2 h-auto">
@@ -118,7 +111,7 @@ const ChatInputWithButton = () => {
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
-              if (msg.trim()) sendMessage(msg);
+              if (msg.trim()) sendMessage();
               setMsg("");
             }
           }}
@@ -147,7 +140,7 @@ const ChatInputWithButton = () => {
       </div>
       <Button
         disabled={msg.trim() == ""}
-        onClick={() => sendMessage(msg)}
+        onClick={sendMessage}
         className="group cursor-pointer bg-white hover:bg-[#3390ec] dark:hover:bg-[#766ac8] dark:bg-[#212121] rounded-4xl h-[52px] w-[52px] overflow-hidden"
       >
         <SendHorizonal className="!h-5 !w-5 text-[#3390ec] fill-[#3390ec] group-hover:text-white group-hover:fill-white dark:text-[#766ac8] dark:fill-[#766ac8] dark:group-hover:text-white dark:group-hover:fill-white transition-colors duration-300" />

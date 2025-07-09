@@ -19,7 +19,7 @@ const TextMessage = ({
           : "bg-gray-100 dark:bg-[#212121] text-gray-800 dark:text-white rounded-bl-none"
       }`}
     >
-      <span className="block break-words pr-16 text-[16px]">{msg.content}</span>
+      <span className="block break-words pr-20 text-[16px]">{msg.content}</span>
 
       {/* Timestamp + Ticks */}
       <span className="absolute bottom-0 right-2 flex items-center gap-[2px] text-xs text-gray-400  dark:text-white">

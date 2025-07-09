@@ -9,10 +9,33 @@ import ImageMessage from "./Messages/ImageMessage";
 import VideoMessage from "./Messages/VideoMessage";
 import { useMessageStore } from "@/store/useMessageStore";
 import { useChatStore } from "@/store/useChatStore";
+import { getMessages } from "@/api/messagesApi";
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const MessagesWindow = () => {
   const selectedChatId = useChatStore((state) => state.selectedChat?.chatId);
   const messagesByChat = useMessageStore((state) => state.messagesByChat);
+  const setMessages = useMessageStore((state) => state.setMessages);
+  const authUser = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedChatId) return;
+
+      try {
+        const messages = await getMessages(selectedChatId);
+        console.log(messages);
+
+        setMessages(selectedChatId, messages);
+      } catch (e) {
+        toast.error("failed to fetch messages");
+        console.log(e);
+      }
+    };
+
+    fetchMessages();
+  }, [selectedChatId, setMessages]);
 
   const messages = useMemo(() => {
     return messagesByChat[selectedChatId ?? ""] ?? [];
@@ -33,7 +56,7 @@ const MessagesWindow = () => {
   }, [messages]);
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
-  const currentUserId = "userA";
+  const currentUserId = authUser?.id;
 
   return (
     <div
@@ -51,9 +74,11 @@ const MessagesWindow = () => {
             {messages.map((msg: Message) => {
               const isSender = msg.senderId === currentUserId;
 
-              const isSeen = msg.seenBy.some(
-                (seen) => seen.userId !== currentUserId
-              );
+              const isSeen = true;
+
+              console.log(msg);
+
+              // msg.seenBy.some((seen) => seen.userId !== currentUserId);
 
               return (
                 <div
