@@ -51,6 +51,12 @@ TalkSync_ui/
 
 ---
 
+## 🔙 Backend Overview
+
+This frontend connects to the **TalkSync** backend built with Spring Boot (Java 21) and PostgreSQL. It exposes RESTful endpoints for authentication and user/chat management, and uses WebSocket/STOMP for real-time messaging and presence updates.
+
+---
+
 ## 🔗 Links
 
 - **Frontend Repository**: [https://github.com/GopiSVDev/TalkSync_ui](https://github.com/GopiSVDev/TalkSync_ui)
