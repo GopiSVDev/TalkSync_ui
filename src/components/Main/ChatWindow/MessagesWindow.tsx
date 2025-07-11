@@ -76,8 +76,6 @@ const MessagesWindow = () => {
 
               const isSeen = true;
 
-              console.log(msg);
-
               // msg.seenBy.some((seen) => seen.userId !== currentUserId);
 
               return (

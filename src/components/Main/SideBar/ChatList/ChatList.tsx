@@ -3,10 +3,19 @@ import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 
 const ChatList = () => {
-  const { chats, fetchChats } = useChatStore();
+  const chats = useChatStore((state) => state.chats);
+  const fetchChats = useChatStore((state) => state.fetchChats);
 
   useEffect(() => {
-    fetchChats();
+    if (document.visibilityState === "visible") {
+      fetchChats();
+    }
+
+    const interval = setInterval(() => {
+      fetchChats();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [fetchChats]);
 
   return (

@@ -5,6 +5,7 @@ import { useChatStore } from "@/store/useChatStore";
 import type { ChatDetail } from "@/types/chat";
 import { useRealTimeStore } from "@/store/useRealtimeStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import { format } from "date-fns";
 
 const ChatCard = ({ chat }: { chat: ChatDetail }) => {
   const selectedChat = useChatStore((state) => state.selectedChat);
@@ -98,21 +99,23 @@ const ChatCard = ({ chat }: { chat: ChatDetail }) => {
               <p className={`truncate ${isSelected ? "text-white" : ""}`}>
                 {displayName}
               </p>
-              <p
-                className={`truncate text-[12px] font-light ${
-                  isSelected ? "text-white" : ""
-                }`}
-              >
-                {chat.lastMessageTime || ""}
-              </p>
             </div>
             {chat.lastMessage && (
               <div
-                className={`text-sm text-muted-foreground truncate ${
+                className={`flex justify-between items-center text-sm text-muted-foreground truncate ${
                   selectedChat?.chatId == chat.chatId ? "text-white" : ""
                 }`}
               >
-                {chat.lastMessage}
+                <p>{chat.lastMessage}</p>
+                <p
+                  className={`truncate text-[12px] font-light ${
+                    isSelected ? "text-white" : ""
+                  }`}
+                >
+                  {(chat.lastMessageTime &&
+                    format(new Date(chat.lastMessageTime), "hh:mm a")) ||
+                    ""}
+                </p>
               </div>
             )}
           </div>

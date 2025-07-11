@@ -5,7 +5,12 @@ interface MessageStore {
   messagesByChat: Record<string, Message[]>;
   setMessages: (chatId: string, messages: Message[]) => void;
   addMessage: (chatId: string, message: Message) => void;
-  markSeen: (chatId: string, userId: string, seenAt: string) => void;
+  markSeen: (
+    chatId: string,
+    userId: string,
+    seenAt: string,
+    messageIds: string[]
+  ) => void;
   clearMessages: (chatId: string) => void;
 }
 
@@ -34,10 +39,12 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
     }));
   },
 
-  markSeen: (chatId, userId, seenAt) => {
+  markSeen: (chatId, userId, seenAt, messageIds) => {
     const currentMessages = get().messagesByChat[chatId] || [];
 
     const updatedMessages = currentMessages.map((message) => {
+      if (!messageIds.includes(message.id)) return;
+
       const seenBy = message.seenBy || [];
       const alreadySeen = seenBy.some((s) => s.userId == userId);
 
