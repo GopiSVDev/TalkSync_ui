@@ -5,12 +5,15 @@ export interface Message {
 
   content?: string;
   mediaUrl?: string;
-  mediaType?: "image" | "video" | "audio" | "file";
+  mediaType?: "image" | "video" | "audio" | "file" | null;
 
   createdAt: string;
+  sentAt: string;
 
   seenBy: {
+    messageId: string;
     userId: string;
     seenAt: string;
+    allSeen: boolean;
   }[];
 }

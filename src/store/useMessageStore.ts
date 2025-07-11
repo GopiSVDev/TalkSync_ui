@@ -5,12 +5,12 @@ interface MessageStore {
   messagesByChat: Record<string, Message[]>;
   setMessages: (chatId: string, messages: Message[]) => void;
   addMessage: (chatId: string, message: Message) => void;
-  markSeen: (
+  updateSeenStatus: (
     chatId: string,
-    userId: string,
-    seenAt: string,
-    messageIds: string[]
+    messageIds: string[],
+    userId: string
   ) => void;
+
   clearMessages: (chatId: string) => void;
 }
 
@@ -39,33 +39,44 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
     }));
   },
 
-  markSeen: (chatId, userId, seenAt, messageIds) => {
-    const currentMessages = get().messagesByChat[chatId] || [];
+  updateSeenStatus: (chatId: string, messageIds: string[], userId: string) => {
+    set((state) => {
+      const messages = state.messagesByChat[chatId] ?? [];
 
-    const updatedMessages = currentMessages.map((message) => {
-      if (!messageIds.includes(message.id)) return;
+      let hasChanged = false;
 
-      const seenBy = message.seenBy || [];
-      const alreadySeen = seenBy.some((s) => s.userId == userId);
+      const updatedMessages: Message[] = messages.map((msg) => {
+        if (!messageIds.includes(msg.id)) return msg;
 
-      if (!alreadySeen) {
+        const alreadySeen = msg.seenBy.some((s) => s.userId === userId);
+        if (alreadySeen) return msg;
+
+        hasChanged = true;
+
         return {
-          ...message,
-          seenBy: [...seenBy, { userId, seenAt }],
+          ...msg,
+          seenBy: [
+            ...msg.seenBy,
+            {
+              messageId: msg.id,
+              userId,
+              seenAt: new Date().toISOString(),
+              allSeen: false,
+            },
+          ],
         };
-      }
+      });
 
-      return message;
+      if (!hasChanged) return {}; // ← no state update if nothing changed
+
+      return {
+        messagesByChat: {
+          ...state.messagesByChat,
+          [chatId]: updatedMessages,
+        },
+      };
     });
-
-    set((state) => ({
-      messagesByChat: {
-        ...state.messagesByChat,
-        [chatId]: updatedMessages,
-      },
-    }));
   },
-
   clearMessages: (chatId) => {
     set((state) => {
       const updated = { ...state.messagesByChat };

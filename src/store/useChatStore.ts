@@ -20,8 +20,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       const response = await getUserChats();
       set({ chats: response });
     } catch (e) {
-      toast.error("Failed to fetch chats");
       console.log(e);
+      toast.error("Failed to fetch chats");
     }
   },
   setChats: (chats) => set({ chats }),

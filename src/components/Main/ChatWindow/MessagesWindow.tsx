@@ -12,6 +12,7 @@ import { useChatStore } from "@/store/useChatStore";
 import { getMessages } from "@/api/messagesApi";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/useAuthStore";
+import { SeenMessageWrapper } from "./Messages/SeenMessageWrapper";
 
 const MessagesWindow = () => {
   const selectedChatId = useChatStore((state) => state.selectedChat?.chatId);
@@ -25,8 +26,6 @@ const MessagesWindow = () => {
 
       try {
         const messages = await getMessages(selectedChatId);
-        console.log(messages);
-
         setMessages(selectedChatId, messages);
       } catch (e) {
         toast.error("failed to fetch messages");
@@ -74,63 +73,69 @@ const MessagesWindow = () => {
             {messages.map((msg: Message) => {
               const isSender = msg.senderId === currentUserId;
 
-              const isSeen = true;
-
-              // msg.seenBy.some((seen) => seen.userId !== currentUserId);
+              const isSeen = msg.seenBy.some(
+                (seen) => seen.userId !== currentUserId
+              );
 
               return (
-                <div
+                <SeenMessageWrapper
                   key={msg.id}
-                  className={`flex ${
-                    isSender ? "justify-end" : "justify-start"
-                  } mb-2`}
+                  message={msg}
+                  chatId={selectedChatId}
                 >
-                  <div className="max-w-xs space-y-2">
-                    {msg.mediaType && (
-                      <div
-                        className={`rounded-xl overflow-hidden ${
-                          msg.mediaType === "image" || msg.mediaType === "video"
-                            ? "max-w-[250px]"
-                            : "bg-gray-100 dark:bg-[#2c2c2c] p-2"
-                        }`}
-                      >
-                        {msg.mediaType === "image" && msg.mediaUrl && (
-                          <ImageMessage mediaUrl={msg.mediaUrl} />
-                        )}
+                  <div
+                    className={`flex ${
+                      isSender ? "justify-end" : "justify-start"
+                    } mb-2`}
+                  >
+                    <div className="max-w-xs space-y-2">
+                      {msg.mediaType && (
+                        <div
+                          className={`rounded-xl overflow-hidden ${
+                            msg.mediaType === "image" ||
+                            msg.mediaType === "video"
+                              ? "max-w-[250px]"
+                              : "bg-gray-100 dark:bg-[#2c2c2c] p-2"
+                          }`}
+                        >
+                          {msg.mediaType === "image" && msg.mediaUrl && (
+                            <ImageMessage mediaUrl={msg.mediaUrl} />
+                          )}
 
-                        {msg.mediaType === "video" && msg.mediaUrl && (
-                          <VideoMessage src={msg.mediaUrl} />
-                        )}
+                          {msg.mediaType === "video" && msg.mediaUrl && (
+                            <VideoMessage src={msg.mediaUrl} />
+                          )}
 
-                        {msg.mediaType === "audio" && msg.mediaUrl && (
-                          <AudioMessage src={msg.mediaUrl} />
-                        )}
+                          {msg.mediaType === "audio" && msg.mediaUrl && (
+                            <AudioMessage src={msg.mediaUrl} />
+                          )}
 
-                        {msg.mediaType === "file" && msg.mediaUrl && (
-                          <FileMessage src={msg.mediaUrl} />
-                        )}
-                      </div>
-                    )}
+                          {msg.mediaType === "file" && msg.mediaUrl && (
+                            <FileMessage src={msg.mediaUrl} />
+                          )}
+                        </div>
+                      )}
 
-                    {/* Text */}
-                    {msg.content && (
-                      <TextMessage
-                        msg={msg}
-                        isSeen={isSeen}
-                        isSender={isSender}
-                      />
-                    )}
+                      {/* Text */}
+                      {msg.content && (
+                        <TextMessage
+                          msg={msg}
+                          isSeen={isSeen}
+                          isSender={isSender}
+                        />
+                      )}
 
-                    {/* Timestamp for media */}
-                    {!msg.content && (
-                      <TimeStampForMedia
-                        createdAt={msg.createdAt}
-                        isSender={isSender}
-                        isSeen={isSeen}
-                      />
-                    )}
+                      {/* Timestamp for media */}
+                      {!msg.content && (
+                        <TimeStampForMedia
+                          createdAt={msg.createdAt}
+                          isSender={isSender}
+                          isSeen={isSeen}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
+                </SeenMessageWrapper>
               );
             })}
           </div>

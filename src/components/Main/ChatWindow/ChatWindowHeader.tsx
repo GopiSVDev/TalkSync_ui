@@ -18,9 +18,9 @@ const ChatWindowHeader = () => {
   const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
   const typingStatus = useRealTimeStore((s) => s.typingStatus);
 
-  const selectedChat = useChatStore((store) => store.selectedChat);
+  const selectedChat = useChatStore((state) => state.selectedChat);
   const selectedChatId = selectedChat?.chatId;
-  const setSelectedChat = useChatStore((store) => store.setSelectedChat);
+  const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
   const { fetchChats } = useChatStore();
 
