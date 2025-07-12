@@ -84,10 +84,20 @@ export const useStompClient = () => {
           }
         );
 
+        const currentUserId = useAuthStore.getState().user?.id;
+
+        const refreshSub = client.subscribe(
+          `/topic/chat.refresh.${currentUserId}`,
+          () => {
+            useChatStore.getState().fetchChats();
+          }
+        );
+
         client.onDisconnect = () => {
           typingSub?.unsubscribe();
           messageSub?.unsubscribe();
           seenSub?.unsubscribe();
+          refreshSub?.unsubscribe();
         };
       },
 

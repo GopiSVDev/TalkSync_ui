@@ -10,12 +10,6 @@ const ChatList = () => {
     if (document.visibilityState === "visible") {
       fetchChats();
     }
-
-    const interval = setInterval(() => {
-      fetchChats();
-    }, 10000);
-
-    return () => clearInterval(interval);
   }, [fetchChats]);
 
   return (
