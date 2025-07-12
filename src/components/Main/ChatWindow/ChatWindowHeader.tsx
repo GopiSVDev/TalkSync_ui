@@ -14,7 +14,13 @@ import { Button } from "@/components/ui/button";
 import { deleteChat } from "@/api/chatApi";
 import { toast } from "sonner";
 
-const ChatWindowHeader = () => {
+const ChatWindowHeader = ({
+  setSidebarMode,
+}: {
+  setSidebarMode: React.Dispatch<
+    React.SetStateAction<"chats" | "settings" | "profile" | "search">
+  >;
+}) => {
   const onlineUsers = useRealTimeStore((state) => state.onlineUsers);
   const typingStatus = useRealTimeStore((s) => s.typingStatus);
 
@@ -60,7 +66,10 @@ const ChatWindowHeader = () => {
   return (
     <div className="w-full p-4 border-b flex items-center gap-4 bg-white dark:bg-[#212121]">
       <ArrowLeft
-        onClick={() => setSelectedChat(null)}
+        onClick={() => {
+          setSelectedChat(null);
+          setSidebarMode("chats");
+        }}
         className="shrink-0 md:hidden cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
         size={30}
       />

@@ -90,6 +90,18 @@ export const useStompClient = () => {
           `/topic/chat.refresh.${currentUserId}`,
           () => {
             useChatStore.getState().fetchChats();
+            // const selectedChatId = useChatStore.getState().selectedChat?.chatId;
+
+            // const updatedChats = useChatStore.getState().chats;
+
+            // const stillExists = updatedChats.some(
+            //   (chat) => chat.chatId === selectedChatId
+            // );
+
+            // if (stillExists) {
+            //   console.log("TRIGGERED");
+            //   useChatStore.getState().setSelectedChat(null);
+            // }
           }
         );
 

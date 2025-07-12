@@ -1,6 +1,11 @@
 import type { Message } from "@/types/message";
 import { Check } from "lucide-react";
 import { format } from "date-fns";
+import { useInView } from "react-intersection-observer";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useStompStore } from "@/store/useStompStore";
+import { useEffect } from "react";
+import { useChatStore } from "@/store/useChatStore";
 
 const TextMessage = ({
   msg,
@@ -11,8 +16,44 @@ const TextMessage = ({
   isSender: boolean;
   isSeen: boolean;
 }) => {
+  const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true });
+  const currentUserId = useAuthStore((s) => s.user?.id);
+  const client = useStompStore((s) => s.client);
+  const chatId = useChatStore((s) => s.selectedChat?.chatId);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (
+        !client?.connected ||
+        !chatId ||
+        !currentUserId ||
+        msg.senderId === currentUserId
+      ) {
+        return;
+      }
+
+      const alreadySeen = msg.seenBy.some(
+        (seen) => seen.userId === currentUserId
+      );
+
+      if (inView && !alreadySeen) {
+        client.publish({
+          destination: "/app/chat.seen",
+          body: JSON.stringify({
+            chatId,
+            userId: currentUserId,
+            messageIds: [msg.id],
+          }),
+        });
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [inView, chatId, client?.connected, currentUserId, msg]);
+
   return (
     <div
+      ref={ref}
       className={`inline-block px-4 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap relative ${
         isSender
           ? "bg-[#EEFFDE] dark:bg-[#8373d3] text-black dark:text-white rounded-br-none"

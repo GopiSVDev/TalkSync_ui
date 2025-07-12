@@ -36,7 +36,7 @@ const Home = () => {
                 !selectedChat ? "hidden md:flex" : "flex"
               } flex-col`}
             >
-              <ChatWindow />
+              <ChatWindow setSidebarMode={setSidebarMode} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -45,7 +45,7 @@ const Home = () => {
         {!selectedChat ? (
           <SidebarContent mode={sidebarMode} setMode={setSidebarMode} />
         ) : (
-          <ChatWindow />
+          <ChatWindow setSidebarMode={setSidebarMode} />
         )}
       </div>
     </>
