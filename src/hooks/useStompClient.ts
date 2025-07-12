@@ -1,16 +1,18 @@
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
 import { useRealTimeStore } from "@/store/useRealtimeStore";
 import { useMessageStore } from "@/store/useMessageStore";
+import { useStompStore } from "@/store/useStompStore";
 
 const baseURL = import.meta.env.VITE_WEBSOCKET_URL;
 
 export const useStompClient = () => {
   const token = useAuthStore((state) => state.token);
-  const clientRef = useRef<Client | null>(null);
+  const setClient = useStompStore((state) => state.setClient);
+  const clearClient = useStompStore((state) => state.clearClient);
 
   useEffect(() => {
     if (!token) return;
@@ -27,7 +29,7 @@ export const useStompClient = () => {
       },
 
       onConnect: () => {
-        const statusSub = client.subscribe("/topic/user/status", (message) => {
+        client.subscribe("/topic/user/status", (message) => {
           const { userId, online } = JSON.parse(message.body);
 
           const authStore = useAuthStore.getState();
@@ -71,11 +73,21 @@ export const useStompClient = () => {
             })
           : null;
 
+        const seenSub = client.subscribe(
+          `/topic/chat.${selectedChatId}.seen`,
+          (message) => {
+            const { chatId, messageIds, userId } = JSON.parse(message.body);
+
+            useMessageStore
+              .getState()
+              .updateSeenStatus(chatId, messageIds, userId);
+          }
+        );
+
         client.onDisconnect = () => {
-          console.log("🛑 STOMP disconnected");
-          statusSub.unsubscribe();
           typingSub?.unsubscribe();
           messageSub?.unsubscribe();
+          seenSub?.unsubscribe();
         };
       },
 
@@ -83,18 +95,19 @@ export const useStompClient = () => {
         console.error("❌ STOMP error", frame);
       },
 
-      debug: (msg) => console.log("[STOMP]", msg),
+      // debug: (msg) => console.log("[STOMP]", msg),
     });
 
     client.activate();
-    clientRef.current = client;
+    setClient(client);
 
     return () => {
-      console.log("🧹 Deactivating STOMP client");
       client.deactivate();
-      clientRef.current = null;
+      clearClient();
     };
-  }, [token]);
+  }, [token, setClient, clearClient]);
 
-  return clientRef.current;
+  const client = useStompStore((state) => state.client);
+
+  return client;
 };

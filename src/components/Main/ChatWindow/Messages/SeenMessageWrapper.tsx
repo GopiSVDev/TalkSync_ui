@@ -30,8 +30,6 @@ export const SeenMessageWrapper = ({ message, chatId, children }: Props) => {
     );
 
     if (inView && !alreadySeen) {
-      console.log("📩 Sending seen message for:", message.id);
-
       client.publish({
         destination: "/app/chat.seen",
         body: JSON.stringify({

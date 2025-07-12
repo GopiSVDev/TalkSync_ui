@@ -13,7 +13,7 @@ const ChatList = () => {
 
     const interval = setInterval(() => {
       fetchChats();
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [fetchChats]);
