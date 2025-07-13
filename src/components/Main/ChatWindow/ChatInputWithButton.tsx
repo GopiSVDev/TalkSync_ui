@@ -140,6 +140,7 @@ const ChatInputWithButton = () => {
       </div>
       <Button
         disabled={msg.trim() == ""}
+        onMouseDown={(e) => e.preventDefault()}
         onClick={sendMessage}
         className="group cursor-pointer bg-white hover:bg-[#3390ec] dark:hover:bg-[#766ac8] dark:bg-[#212121] rounded-4xl h-[52px] w-[52px] overflow-hidden"
       >

@@ -17,6 +17,7 @@ export default function ChatWindow({
 
       <div className="relative w-full max-w-[700px] flex flex-col flex-1 overflow-hidden">
         {/* message window */}
+
         <MessagesWindow />
 
         {/* chat window input with send button */}
