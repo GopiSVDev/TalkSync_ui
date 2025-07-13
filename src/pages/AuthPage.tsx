@@ -12,7 +12,7 @@ const AuthPage = () => {
   const { isLoading } = useAuthStore();
 
   return (
-    <div className="w-full flex flex-col justify-center items-center min-h-screen bg-[#212121] gap-5">
+    <div className="w-full flex flex-col justify-center items-center [min-height:calc(var(--vh)_*_100)] bg-[#212121] gap-5">
       <div className="mt-3">
         <img src="/logo.svg" className="w-[100px] md:w-[120px]" />
       </div>

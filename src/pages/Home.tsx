@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="h-screen w-full hidden md:flex flex-row overflow-hidden chat-bg">
+      <div className="[height:calc(var(--vh)_*_100)] w-full hidden md:flex flex-row overflow-hidden chat-bg">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
             defaultSize={25}
@@ -41,7 +41,7 @@ const Home = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-      <div className="chat-bg h-screen w-full flex flex-col md:hidden">
+      <div className="chat-bg [height:calc(var(--vh)_*_100)] w-full flex flex-col md:hidden">
         {!selectedChat ? (
           <SidebarContent mode={sidebarMode} setMode={setSidebarMode} />
         ) : (

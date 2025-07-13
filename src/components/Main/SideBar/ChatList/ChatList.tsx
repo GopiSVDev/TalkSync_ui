@@ -17,7 +17,7 @@ const ChatList = () => {
       {chats.length > 0 ? (
         chats.map((chat) => <ChatCard key={chat.chatId} chat={chat} />)
       ) : (
-        <div className="w-full h-screen flex flex-col items-center px-4 pt-10">
+        <div className="w-full [height:calc(var(--vh)_*_100)] flex flex-col items-center px-4 pt-10">
           <h1 className="text-2xl font-medium">No Chats Yet</h1>
           <h3 className="text-center">
             Use the search bar above to find people and start chatting.
