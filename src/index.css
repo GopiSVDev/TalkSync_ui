@@ -148,7 +148,7 @@ body {
 }
 
 .chat-bg {
-  @apply relative flex-1 flex-col bg-cover bg-no-repeat bg-center;
+  @apply relative bg-cover bg-no-repeat bg-center;
   background-image: url("/bg.png");
 }
 

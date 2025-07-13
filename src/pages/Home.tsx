@@ -16,8 +16,8 @@ const Home = () => {
   >("chats");
 
   return (
-    <>
-      <div className="[height:calc(var(--vh)_*_100)] w-full hidden md:flex flex-row overflow-hidden chat-bg">
+    <div>
+      <div className="min-h-screen h-full w-full hidden md:flex flex-row overflow-hidden chat-bg">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
             defaultSize={25}
@@ -32,7 +32,7 @@ const Home = () => {
 
           <ResizablePanel>
             <div
-              className={` flex-1 ${
+              className={`h-screen flex-1 ${
                 !selectedChat ? "hidden md:flex" : "flex"
               } flex-col`}
             >
@@ -41,14 +41,14 @@ const Home = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-      <div className="chat-bg [height:calc(var(--vh)_*_100)] w-full flex flex-col md:hidden">
+      <div className="chat-bg h-screen w-full flex flex-col md:hidden overflow-hidden">
         {!selectedChat ? (
           <SidebarContent mode={sidebarMode} setMode={setSidebarMode} />
         ) : (
           <ChatWindow setSidebarMode={setSidebarMode} />
         )}
       </div>
-    </>
+    </div>
   );
 };
 

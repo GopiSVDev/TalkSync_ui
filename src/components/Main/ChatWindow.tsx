@@ -10,20 +10,17 @@ export default function ChatWindow({
   >;
 }) {
   return (
-    <div className="relative [height:calc(var(--vh)_*_100)] flex flex-col items-center z-10">
+    <div className="flex flex-col flex-1 items-center w-full overflow-hidden">
       {/* Header with status */}
-      <div className="w-full">
-        <ChatWindowHeader setSidebarMode={setSidebarMode} />
-      </div>
+      <ChatWindowHeader setSidebarMode={setSidebarMode} />
 
-      <div className="relative w-full flex flex-col max-w-[700px] flex-1">
+      <div className="relative w-full max-w-[700px] flex flex-col flex-1 overflow-hidden">
         {/* message window */}
-        <div className="flex-1 overflow-y-auto pt-[60px] pb-[72px]">
-          <MessagesWindow />
-        </div>
+
+        <MessagesWindow />
 
         {/* chat window input with send button */}
-        <div className="absolute bottom-0 left-0 w-full px-4 pb-2 z-20">
+        <div className="sticky bottom-0 w-full px-4 pb-2 z-20">
           <ChatInputWithButton />
         </div>
       </div>
