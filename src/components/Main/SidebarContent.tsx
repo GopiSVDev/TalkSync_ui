@@ -26,7 +26,7 @@ export default function SidebarContent({
   };
 
   return (
-    <div className="[height:calc(var(--vh)_*_100)] flex flex-col gap-2 bg-white dark:bg-[#212121] z-10">
+    <div className="h-full flex flex-col gap-2 bg-white dark:bg-[#212121] z-10">
       <div className="sticky top-0 z-10 bg-white dark:bg-[#212121] p-4 font-semibold text-lg">
         {mode === "chats" ? (
           <div className="flex items-center gap-2">
@@ -63,7 +63,9 @@ export default function SidebarContent({
           </div>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto overscroll-contain">
+
+      {/* Components page */}
+      <div className="flex-1 overflow-y-auto overscroll-none">
         {components[mode]}
       </div>
     </div>

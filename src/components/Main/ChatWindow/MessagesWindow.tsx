@@ -59,7 +59,7 @@ const MessagesWindow = () => {
   return (
     <div
       ref={chatContainerRef}
-      className="flex-1 w-full px-4 text-muted-foreground overflow-y-auto scrollbar-hide flex-col-reverse items-end"
+      className="flex flex-col flex-1 w-full px-4 text-muted-foreground overflow-y-auto scrollbar-hide min-h-0"
     >
       {Object.entries(groupedMessages).map(([date, msgs]) => {
         const messages = msgs as Message[];

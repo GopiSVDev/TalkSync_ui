@@ -16,8 +16,8 @@ const Home = () => {
   >("chats");
 
   return (
-    <div>
-      <div className="min-h-screen h-full w-full hidden md:flex flex-row overflow-hidden chat-bg">
+    <>
+      <div className="min-h-screen w-full hidden md:flex flex-row chat-bg">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel
             defaultSize={25}
@@ -41,14 +41,14 @@ const Home = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-      <div className="chat-bg h-screen w-full flex flex-col md:hidden overflow-hidden">
+      <div className="chat-bg h-full w-full flex flex-col md:hidden">
         {!selectedChat ? (
           <SidebarContent mode={sidebarMode} setMode={setSidebarMode} />
         ) : (
           <ChatWindow setSidebarMode={setSidebarMode} />
         )}
       </div>
-    </div>
+    </>
   );
 };
 

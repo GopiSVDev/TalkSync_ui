@@ -10,13 +10,13 @@ export default function ChatWindow({
   >;
 }) {
   return (
-    <div className="flex flex-col flex-1 items-center w-full overflow-hidden">
+    <div className="flex flex-col flex-1 w-full items-center min-h-0">
       {/* Header with status */}
+
       <ChatWindowHeader setSidebarMode={setSidebarMode} />
 
       <div className="relative w-full max-w-[700px] flex flex-col flex-1 overflow-hidden">
         {/* message window */}
-
         <MessagesWindow />
 
         {/* chat window input with send button */}
