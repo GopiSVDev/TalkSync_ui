@@ -64,7 +64,7 @@ const ChatWindowHeader = ({
   if (!selectedChat) return;
 
   return (
-    <div className="w-full p-4 border-b flex items-center gap-4 bg-white dark:bg-[#212121]">
+    <div className="sticky top-0 z-10 w-full p-4 border-b flex items-center gap-4 bg-white dark:bg-[#212121]">
       <ArrowLeft
         onClick={() => {
           setSelectedChat(null);

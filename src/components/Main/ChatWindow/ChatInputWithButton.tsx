@@ -78,7 +78,7 @@ const ChatInputWithButton = () => {
   };
 
   return (
-    <div className="w-full items-center max-w-[700px] pb-2 px-4 flex gap-2 h-auto">
+    <div className="w-full fixed bottom-0 z-20 left-0 items-center max-w-[700px] pb-2 px-4 flex gap-2 h-auto">
       <div className="bg-white dark:bg-[#212121] w-full flex items-center gap-1 px-4 rounded-3xl min-w-0">
         <div className="relative">
           <Smile
