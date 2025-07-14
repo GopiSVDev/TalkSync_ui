@@ -1,6 +1,7 @@
 import ChatWindowHeader from "./ChatWindow/ChatWindowHeader";
 import MessagesWindow from "./ChatWindow/MessagesWindow";
 import ChatInputWithButton from "./ChatWindow/ChatInputWithButton";
+import { useChatStore } from "@/store/useChatStore";
 
 export default function ChatWindow({
   setSidebarMode,
@@ -9,6 +10,10 @@ export default function ChatWindow({
     React.SetStateAction<"chats" | "settings" | "profile" | "search">
   >;
 }) {
+  const selectedChat = useChatStore((state) => state.selectedChat);
+
+  if (selectedChat === null) return;
+
   return (
     <div className="flex flex-col flex-1 w-full items-center min-h-0">
       {/* Header with status */}

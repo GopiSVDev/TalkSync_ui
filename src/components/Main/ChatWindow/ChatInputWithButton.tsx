@@ -53,6 +53,17 @@ const ChatInputWithButton = () => {
         start + emojiChar.length;
     }, 0);
   };
+  const isMobileDevice = () => {
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  };
+
+  const handleEmojiClick = () => {
+    if (isMobileDevice()) {
+      textareaRef.current?.focus();
+    } else {
+      setShowPicker((prev) => !prev);
+    }
+  };
 
   useEffect(() => {
     return () => {
@@ -82,7 +93,7 @@ const ChatInputWithButton = () => {
       <div className="bg-white dark:bg-[#212121] w-full flex items-center gap-1 px-4 rounded-3xl min-w-0">
         <div className="relative">
           <Smile
-            onClick={() => setShowPicker((prev) => !prev)}
+            onClick={handleEmojiClick}
             className="text-gray-500 cursor-pointer"
           />
 

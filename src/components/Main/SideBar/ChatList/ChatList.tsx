@@ -15,7 +15,7 @@ const ChatList = () => {
   return (
     <>
       {isChatsLoading ? (
-        [1, 2, 3].map(() => <ChatCardSkeleton />)
+        [1, 2, 3].map((i) => <ChatCardSkeleton key={i} />)
       ) : chats.length > 0 ? (
         chats.map((chat) => <ChatCard key={chat.chatId} chat={chat} />)
       ) : (

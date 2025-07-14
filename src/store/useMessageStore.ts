@@ -67,7 +67,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
         };
       });
 
-      if (!hasChanged) return {}; // ← no state update if nothing changed
+      if (!hasChanged) return {};
 
       return {
         messagesByChat: {
