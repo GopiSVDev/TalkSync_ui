@@ -1,6 +1,7 @@
 import type { Message } from "@/types/message";
 import { Check } from "lucide-react";
 import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 import { useInView } from "react-intersection-observer";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useStompStore } from "@/store/useStompStore";
@@ -20,6 +21,8 @@ const TextMessage = ({
   const currentUserId = useAuthStore((s) => s.user?.id);
   const client = useStompStore((s) => s.client);
   const chatId = useChatStore((s) => s.selectedChat?.chatId);
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const zonedDate = toZonedTime(msg.createdAt, timeZone);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -63,7 +66,7 @@ const TextMessage = ({
       <span className="block break-words pr-20 text-[16px]">{msg.content}</span>
 
       <span className="absolute bottom-0 right-2 flex items-center gap-[2px] text-xs text-gray-400  dark:text-white">
-        {format(new Date(msg.createdAt), "h:mm a")}
+        {format(zonedDate, "h:mm a")}
         {isSender && (
           <>
             {isSeen ? (

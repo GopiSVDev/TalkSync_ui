@@ -95,6 +95,8 @@ const MessagesWindow = () => {
                     (seen) => seen.userId !== currentUserId
                   );
 
+                  console.log(msg.createdAt);
+
                   return (
                     <motion.div
                       key={msg.id}
