@@ -21,7 +21,8 @@ const TextMessage = ({
   const currentUserId = useAuthStore((s) => s.user?.id);
   const client = useStompStore((s) => s.client);
   const chatId = useChatStore((s) => s.selectedChat?.chatId);
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const timeZone = "Asia/Kolkata";
   const zonedDate = toZonedTime(msg.createdAt, timeZone);
 
   useEffect(() => {
