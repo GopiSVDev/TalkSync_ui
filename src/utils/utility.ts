@@ -55,7 +55,8 @@ export const formatToUserLocalTime = (isoTimestamp: string) => {
 
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  const zonedDate = toZonedTime(isoTimestamp, userTimeZone);
+  const date = new Date(isoTimestamp);
+  const zonedDate = toZonedTime(date, userTimeZone);
 
   return formatTZ(zonedDate, "h:mm a", { timeZone: userTimeZone });
 };
