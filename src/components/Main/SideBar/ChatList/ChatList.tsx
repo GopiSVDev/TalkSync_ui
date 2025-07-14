@@ -1,20 +1,22 @@
 import ChatCard from "./ChatCard";
 import { useEffect } from "react";
 import { useChatStore } from "@/store/useChatStore";
+import ChatCardSkeleton from "@/components/skeletons/ChatCardSkeleton";
 
 const ChatList = () => {
   const chats = useChatStore((state) => state.chats);
   const fetchChats = useChatStore((state) => state.fetchChats);
+  const isChatsLoading = useChatStore((state) => state.isChatsLoading);
 
   useEffect(() => {
-    if (document.visibilityState === "visible") {
-      fetchChats();
-    }
+    fetchChats();
   }, [fetchChats]);
 
   return (
     <>
-      {chats.length > 0 ? (
+      {isChatsLoading ? (
+        [1, 2, 3].map(() => <ChatCardSkeleton />)
+      ) : chats.length > 0 ? (
         chats.map((chat) => <ChatCard key={chat.chatId} chat={chat} />)
       ) : (
         <div className="w-full flex flex-col items-center px-4 pt-10">

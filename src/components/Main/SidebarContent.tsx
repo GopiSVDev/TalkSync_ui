@@ -6,6 +6,7 @@ import { useState, type JSX } from "react";
 import { ArrowLeft } from "lucide-react";
 import SearchBar from "./SideBar/Search/SearchBar";
 import SearchList from "./SideBar/Search/SearchList";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function SidebarContent({
   mode,
@@ -53,7 +54,49 @@ export default function SidebarContent({
 
       {/* Components page */}
       <div className="flex-1 overflow-y-auto overscroll-none h-full">
-        {components[mode]}
+        <AnimatePresence mode="wait" initial={false}>
+          {mode === "chats" && (
+            <motion.div
+              key="chats"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.1 }}
+            >
+              {components[mode]}
+            </motion.div>
+          )}
+
+          {mode === "search" && (
+            <>
+              <motion.div
+                key="search"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{
+                  duration: 0.1,
+                  ease: "easeInOut",
+                  scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+                }}
+              >
+                {components[mode]}
+              </motion.div>
+            </>
+          )}
+
+          {(mode === "profile" || mode === "settings") && (
+            <motion.div
+              key={mode}
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {components[mode]}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

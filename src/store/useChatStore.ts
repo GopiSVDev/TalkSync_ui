@@ -6,6 +6,7 @@ import { create } from "zustand";
 type ChatStore = {
   chats: ChatDetail[];
   selectedChat: ChatDetail | null;
+  isChatsLoading: boolean;
   fetchChats: () => Promise<void>;
   setChats: (chats: ChatDetail[]) => void;
   setSelectedChat: (chat: ChatDetail | null) => void;
@@ -15,15 +16,23 @@ type ChatStore = {
 export const useChatStore = create<ChatStore>((set, get) => ({
   chats: [],
   selectedChat: null,
+  isChatsLoading: false,
   fetchChats: async () => {
+    const state = get();
+    if (state.chats.length > 0) return;
+
+    set({ isChatsLoading: true });
     try {
       const response = await getUserChats();
       set({ chats: response });
     } catch (e) {
       console.log(e);
       toast.error("Failed to fetch chats");
+    } finally {
+      set({ isChatsLoading: false });
     }
   },
+
   setChats: (chats) => set({ chats }),
   setSelectedChat: (chat) => set({ selectedChat: chat }),
 
