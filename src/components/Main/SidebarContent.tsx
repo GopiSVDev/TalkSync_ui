@@ -27,45 +27,32 @@ export default function SidebarContent({
 
   return (
     <div className="h-full flex flex-col gap-2 bg-white dark:bg-[#212121] z-10">
-      <div className="sticky top-0 z-10 bg-white dark:bg-[#212121] p-4 font-semibold text-lg">
-        {mode === "chats" ? (
-          <div className="flex items-center gap-2">
-            <DropDownMenu setMode={setMode} />
+      <div className="sticky top-0 z-10 bg-white dark:bg-[#212121] p-4 font-semibold text-lg transition-all duration-300">
+        <div className="flex items-center gap-2">
+          <div className="w-[40px] flex justify-center transition-all duration-300">
+            {mode === "chats" ? (
+              <DropDownMenu setMode={setMode} />
+            ) : (
+              <ArrowLeft
+                className="cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
+                size={30}
+                onClick={() => setMode("chats")}
+              />
+            )}
+          </div>
+
+          <div className="flex-1 transition-all duration-300">
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               setMode={setMode}
             />
           </div>
-        ) : mode == "search" ? (
-          <div className="flex items-center gap-2">
-            <ArrowLeft
-              className="cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
-              size={35}
-              onClick={() => setMode("chats")}
-            />
-            <SearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              setMode={setMode}
-            />
-          </div>
-        ) : (
-          <div className="flex gap-4 items-center">
-            <ArrowLeft
-              className="cursor-pointer rounded-3xl hover:bg-[rgba(244,244,245)] dark:hover:bg-[rgba(44,44,44)]"
-              size={30}
-              onClick={() => setMode("chats")}
-            />
-            <p className="text-[20px]">
-              {mode.substring(0, 1).toUpperCase() + mode.substring(1)}
-            </p>
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Components page */}
-      <div className="flex-1 overflow-y-auto overscroll-none">
+      <div className="flex-1 overflow-y-auto overscroll-none h-full">
         {components[mode]}
       </div>
     </div>

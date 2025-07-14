@@ -42,12 +42,12 @@ export function DropDownMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="p-0">
+      <DropdownMenuTrigger asChild className="p-0 shadow-none">
         <Button
           className="cursor-pointer bg-white hover:bg-[rgba(244,244,245)] dark:bg-[#212121] dark:hover:bg-[rgba(44,44,44)] rounded-4xl p-0"
           variant="secondary"
         >
-          <AlignJustify className="!h-5 !w-5" size={30} />
+          <AlignJustify className="!h-6 !w-6" size={30} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

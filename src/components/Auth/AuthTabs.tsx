@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { useEffect } from "react";
+import { motion } from "motion/react";
 
 function AuthTabs() {
   useEffect(() => {
@@ -19,11 +20,29 @@ function AuthTabs() {
           Register
         </TabsTrigger>
       </TabsList>
+
       <TabsContent value="login">
-        <LoginForm />
+        <motion.div
+          key="login"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 30 }}
+          transition={{ duration: 0.3 }}
+        >
+          <LoginForm />
+        </motion.div>
       </TabsContent>
+
       <TabsContent value="register">
-        <RegisterForm />
+        <motion.div
+          key="register"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -30 }}
+          transition={{ duration: 0.3 }}
+        >
+          <RegisterForm />
+        </motion.div>
       </TabsContent>
     </Tabs>
   );
