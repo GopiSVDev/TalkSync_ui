@@ -30,21 +30,23 @@ export function groupMessagesByDate(messages: Message[]) {
 export function formatLastSeen(lastSeen: string | undefined): string {
   if (!lastSeen) return "last seen recently";
 
-  lastSeen = formatToUserLocalTime(lastSeen);
+  const utcDate = parseISO(lastSeen);
 
-  const date = parseISO(lastSeen);
-  const minutesAgo = differenceInMinutes(new Date(), date);
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const localDate = toZonedTime(utcDate, userTimeZone);
+
+  const minutesAgo = differenceInMinutes(new Date(), localDate);
 
   if (minutesAgo < 1) {
     return "last seen just now";
   } else if (minutesAgo < 60) {
-    return `last seen ${formatDistanceToNow(date)} ago`;
-  } else if (isToday(date)) {
-    return `last seen today at ${format(date, "HH:mm")}`;
-  } else if (isYesterday(date)) {
-    return `last seen yesterday at ${format(date, "HH:mm")}`;
+    return `last seen ${formatDistanceToNow(localDate)} ago`;
+  } else if (isToday(localDate)) {
+    return `last seen today at ${format(localDate, "HH:mm")}`;
+  } else if (isYesterday(localDate)) {
+    return `last seen yesterday at ${format(localDate, "HH:mm")}`;
   } else {
-    return `last seen on ${format(date, "d MMM yyyy 'at' HH:mm")}`;
+    return `last seen on ${format(localDate, "d MMM yyyy 'at' HH:mm")}`;
   }
 }
 
