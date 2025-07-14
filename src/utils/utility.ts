@@ -29,7 +29,7 @@ export function groupMessagesByDate(messages: Message[]) {
 
 export function formatLastSeen(lastSeen: string | undefined): string {
   if (!lastSeen) return "last seen recently";
-
+  lastSeen = fixDbTimestamp(lastSeen);
   const utcDate = parseISO(lastSeen);
 
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -51,9 +51,19 @@ export function formatLastSeen(lastSeen: string | undefined): string {
 }
 
 export const formatToUserLocalTime = (isoTimestamp: string) => {
+  isoTimestamp = fixDbTimestamp(isoTimestamp);
+
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const zonedDate = toZonedTime(isoTimestamp, userTimeZone);
 
   return formatTZ(zonedDate, "h:mm a", { timeZone: userTimeZone });
+};
+
+const fixDbTimestamp = (raw: string) => {
+  const [datePart, timePart] = raw.split(" ");
+  const milliseconds =
+    timePart.slice(0, 12).split(".")[1]?.slice(0, 3) || "000";
+  const timeWithoutMicros = timePart.split(".")[0];
+  return `${datePart}T${timeWithoutMicros}.${milliseconds}Z`;
 };
