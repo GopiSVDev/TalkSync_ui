@@ -61,9 +61,15 @@ export const formatToUserLocalTime = (isoTimestamp: string) => {
 };
 
 const fixDbTimestamp = (raw: string) => {
+  if (!raw || typeof raw !== "string" || !raw.includes(" ")) {
+    return raw;
+  }
+
   const [datePart, timePart] = raw.split(" ");
-  const milliseconds =
-    timePart.slice(0, 12).split(".")[1]?.slice(0, 3) || "000";
-  const timeWithoutMicros = timePart.split(".")[0];
-  return `${datePart}T${timeWithoutMicros}.${milliseconds}Z`;
+  if (!datePart || !timePart) return raw;
+
+  const [time, micro] = timePart.split(".");
+  const milliseconds = micro?.slice(0, 3) || "000";
+
+  return `${datePart}T${time}.${milliseconds}Z`;
 };
