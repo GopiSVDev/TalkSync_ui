@@ -54,7 +54,7 @@ const MessagesWindow = () => {
   return (
     <div
       ref={chatContainerRef}
-      className="flex flex-col-reverse flex-1 w-full px-4 text-muted-foreground overflow-y-auto scrollbar-hide min-h-0"
+      className="flex flex-col flex-1 w-full px-4 text-muted-foreground overflow-y-auto scrollbar-hide min-h-0"
     >
       {isLoading ? (
         <div className="space-y-2 px-4 py-4">
