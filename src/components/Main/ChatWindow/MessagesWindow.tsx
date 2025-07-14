@@ -20,6 +20,8 @@ const MessagesWindow = () => {
 
   const chatContainerRef = useRef(null);
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const fetchMessages = async () => {
       if (!selectedChatId) return;
@@ -50,6 +52,10 @@ const MessagesWindow = () => {
   }, [messages]);
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div
@@ -159,6 +165,7 @@ const MessagesWindow = () => {
           );
         })
       )}
+      <div ref={bottomRef} />
     </div>
   );
 };
