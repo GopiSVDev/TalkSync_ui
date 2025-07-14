@@ -7,6 +7,7 @@ import {
   formatDistanceToNow,
   differenceInMinutes,
 } from "date-fns";
+import { format as formatTZ, toZonedTime } from "date-fns-tz";
 
 export function groupMessagesByDate(messages: Message[]) {
   const grouped: Record<string, Message[]> = {};
@@ -29,6 +30,8 @@ export function groupMessagesByDate(messages: Message[]) {
 export function formatLastSeen(lastSeen: string | undefined): string {
   if (!lastSeen) return "last seen recently";
 
+  lastSeen = formatToUserLocalTime(lastSeen);
+
   const date = parseISO(lastSeen);
   const minutesAgo = differenceInMinutes(new Date(), date);
 
@@ -44,3 +47,11 @@ export function formatLastSeen(lastSeen: string | undefined): string {
     return `last seen on ${format(date, "d MMM yyyy 'at' HH:mm")}`;
   }
 }
+
+export const formatToUserLocalTime = (isoTimestamp: string) => {
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const zonedDate = toZonedTime(isoTimestamp, userTimeZone);
+
+  return formatTZ(zonedDate, "h:mm a", { timeZone: userTimeZone });
+};
