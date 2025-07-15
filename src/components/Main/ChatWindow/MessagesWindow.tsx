@@ -16,7 +16,10 @@ const MessagesWindow = () => {
   const setMessages = useMessageStore((state) => state.setMessages);
   const currentUserId = useAuthStore((state) => state.user?.id);
 
+  const [page, setPage] = useState(0);
+  const [isLastPage, setIsLastPage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
 
   const chatContainerRef = useRef(null);
 
@@ -25,10 +28,14 @@ const MessagesWindow = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       if (!selectedChatId) return;
+
       setIsLoading(true);
+      setShouldScrollToBottom(true);
       try {
-        const messages = await getMessages(selectedChatId);
-        setMessages(selectedChatId, messages);
+        const data = await getMessages(selectedChatId, 0);
+        setMessages(selectedChatId, data.content);
+        setPage(0);
+        setIsLastPage(data.last);
       } catch (e) {
         toast.error("failed to fetch messages");
         console.log(e);
@@ -39,6 +46,33 @@ const MessagesWindow = () => {
 
     fetchMessages();
   }, [selectedChatId, setMessages]);
+
+  const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (e.currentTarget.scrollTop === 0) {
+      loadOlderMessages();
+    }
+  };
+
+  const loadOlderMessages = async () => {
+    if (isLastPage || !selectedChatId || !bottomRef.current) return;
+
+    setShouldScrollToBottom(false);
+    try {
+      const nextPage = page + 1;
+      const data = await getMessages(selectedChatId, nextPage);
+
+      const currentMessages =
+        useMessageStore.getState().messagesByChat[selectedChatId] || [];
+      const newMessages = [...data.content, ...currentMessages];
+
+      setMessages(selectedChatId, newMessages);
+      setPage(nextPage);
+      setIsLastPage(data.last);
+    } catch (e) {
+      toast.error("Failed to load more messages");
+      console.error(e);
+    }
+  };
 
   const messages = useMemo(() => {
     return messagesByChat[selectedChatId ?? ""] ?? [];
@@ -54,12 +88,14 @@ const MessagesWindow = () => {
   const groupedMessages = groupMessagesByDate(sortedMessages);
 
   useEffect(() => {
+    if (!shouldScrollToBottom) return;
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, shouldScrollToBottom]);
 
   return (
     <div
       ref={chatContainerRef}
+      onScroll={onScroll}
       className="flex flex-col flex-1 w-full px-4 text-muted-foreground overflow-y-auto scrollbar-hide min-h-0"
     >
       {isLoading ? (

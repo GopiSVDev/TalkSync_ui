@@ -10,8 +10,6 @@ interface MessageStore {
     messageIds: string[],
     userId: string
   ) => void;
-
-  clearMessages: (chatId: string) => void;
 }
 
 export const useMessageStore = create<MessageStore>((set, get) => ({
@@ -31,12 +29,16 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
     const exists = currentMessages.some((m) => m.id == message.id);
     if (exists) return;
 
-    set((state) => ({
-      messagesByChat: {
-        ...state.messagesByChat,
-        [chatId]: [...currentMessages, message],
-      },
-    }));
+    set((state) => {
+      const updated = [...currentMessages, message];
+
+      return {
+        messagesByChat: {
+          ...state.messagesByChat,
+          [chatId]: updated,
+        },
+      };
+    });
   },
 
   updateSeenStatus: (chatId: string, messageIds: string[], userId: string) => {
@@ -75,13 +77,6 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
           [chatId]: updatedMessages,
         },
       };
-    });
-  },
-  clearMessages: (chatId) => {
-    set((state) => {
-      const updated = { ...state.messagesByChat };
-      delete updated[chatId];
-      return { messagesByChat: updated };
     });
   },
 }));

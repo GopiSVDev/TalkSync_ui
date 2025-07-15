@@ -1,7 +1,8 @@
-import type { Message } from "@/types/message";
 import axios from "./axiosInstance";
 
-export const getMessages = async (chatId: string): Promise<Message[]> => {
-  const response = await axios.get(`/messages/${chatId}`);
-  return response.data.content;
+export const getMessages = async (chatId: string, page = 0, size = 20) => {
+  const response = await axios.get(
+    `/messages/${chatId}?page=${page}&size=${size}`
+  );
+  return response.data;
 };
