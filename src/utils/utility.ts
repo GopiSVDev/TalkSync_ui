@@ -11,16 +11,22 @@ import { format as formatTZ, toZonedTime } from "date-fns-tz";
 
 export function groupMessagesByDate(messages: Message[]) {
   const grouped: Record<string, Message[]> = {};
-  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   messages.forEach((msg) => {
-    const utcDate = parseISO(msg.createdAt);
-    const localDate = toZonedTime(utcDate, userTimeZone);
+    if (!msg.createdAt) return;
+
+    let date: Date;
+    try {
+      date = parseISO(msg.createdAt);
+      if (isNaN(date.getTime())) return;
+    } catch {
+      return;
+    }
 
     let key;
-    if (isToday(localDate)) key = "Today";
-    else if (isYesterday(localDate)) key = "Yesterday";
-    else key = format(localDate, "MMMM d, yyyy");
+    if (isToday(date)) key = "Today";
+    else if (isYesterday(date)) key = "Yesterday";
+    else key = format(date, "MMMM d, yyyy");
 
     if (!grouped[key]) grouped[key] = [];
     grouped[key].push(msg);
@@ -28,7 +34,6 @@ export function groupMessagesByDate(messages: Message[]) {
 
   return grouped;
 }
-
 export function formatLastSeen(lastSeen: string | undefined): string {
   if (!lastSeen) return "last seen recently";
 
