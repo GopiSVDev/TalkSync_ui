@@ -11,14 +11,16 @@ import { format as formatTZ, toZonedTime } from "date-fns-tz";
 
 export function groupMessagesByDate(messages: Message[]) {
   const grouped: Record<string, Message[]> = {};
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   messages.forEach((msg) => {
-    const date = parseISO(msg.createdAt);
+    const utcDate = parseISO(msg.createdAt);
+    const localDate = toZonedTime(utcDate, userTimeZone);
 
     let key;
-    if (isToday(date)) key = "Today";
-    else if (isYesterday(date)) key = "Yesterday";
-    else key = format(date, "MMMM d, yyyy");
+    if (isToday(localDate)) key = "Today";
+    else if (isYesterday(localDate)) key = "Yesterday";
+    else key = format(localDate, "MMMM d, yyyy");
 
     if (!grouped[key]) grouped[key] = [];
     grouped[key].push(msg);
