@@ -27,8 +27,7 @@ const ChatWindowHeader = ({
   const selectedChat = useChatStore((state) => state.selectedChat);
   const selectedChatId = selectedChat?.chatId;
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
-
-  const { fetchChats } = useChatStore();
+  const fetchChats = useChatStore((state) => state.fetchChats);
 
   const authUserId = useAuthStore((state) => state.user?.id);
 
@@ -54,7 +53,7 @@ const ChatWindowHeader = ({
     try {
       await deleteChat(selectedChat.chatId);
       setSelectedChat(null);
-      await fetchChats();
+      await fetchChats(true);
     } catch (err) {
       toast.error("Failed To Delete Chat");
       console.log(err);

@@ -49,7 +49,7 @@ const TextMessage = ({
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [inView, chatId, client?.connected, currentUserId, msg]);
+  }, [inView, chatId, client?.connected, currentUserId, msg, client]);
 
   return (
     <div

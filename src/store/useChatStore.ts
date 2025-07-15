@@ -7,7 +7,7 @@ type ChatStore = {
   chats: ChatDetail[];
   selectedChat: ChatDetail | null;
   isChatsLoading: boolean;
-  fetchChats: () => Promise<void>;
+  fetchChats: (force?: boolean) => Promise<void>;
   setChats: (chats: ChatDetail[]) => void;
   setSelectedChat: (chat: ChatDetail | null) => void;
   updateSelectedChatOnlineStatus: (userId: string, isOnline: boolean) => void;
@@ -17,9 +17,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   chats: [],
   selectedChat: null,
   isChatsLoading: false,
-  fetchChats: async () => {
+  fetchChats: async (force = false) => {
     const state = get();
-    if (state.chats.length > 0) return;
+    if (!force && state.chats.length > 0) return;
 
     set({ isChatsLoading: true });
     try {
