@@ -61,4 +61,3 @@ This frontend connects to the **TalkSync** backend built with Spring Boot (Java 
 
 - **Frontend Repository**: [https://github.com/GopiSVDev/TalkSync_ui](https://github.com/GopiSVDev/TalkSync_ui)
 - **Backend Repository**: [https://github.com/GopiSVDev/TalkSync](https://github.com/GopiSVDev/TalkSync)
-- **Live Demo**:
